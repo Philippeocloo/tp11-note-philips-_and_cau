@@ -1,0 +1,98 @@
+@startuml Plateau
+
+enum Border {
+    O
+    NE
+    NO
+    SE
+    SO
+}
+
+enum Couleur {
+    Rouge
+    Bleu
+    Jaune
+    Vert
+    Multicouleurs
+}
+
+enum Forme {
+    Croix
+    Cercle
+    Carre
+}
+
+class Plateau {
+    - cases : List<Case>
+    - robots : List<Robot>
+    - joueurs : List<Joueur>
+    - taille_x : int
+    - taille_y : int
+    + Plateau()
+    + initialiser_cases() : void
+    + initialiser_robots() : void
+    + initialiser_joueurs() : void
+    + afficher_plateau() : void
+}
+
+class Case {
+    - x : int
+    - y : int
+    - coordonnees : List<Border>
+    - cible : Cible
+    + Case(x: int, y: int)
+    + afficher_case() : void
+}
+
+class Cible {
+    - forme : Forme
+    - couleur : Couleur
+    + Cible(forme: Forme, couleur: Couleur)
+}
+
+class Robot {
+    - x : int
+    - y : int
+    - couleur : Couleur
+    + Robot(x: int, y: int, couleur: Couleur)
+    + deplacement(direction: String) : void
+}
+
+class Joueur {
+    - lettre : String
+    - points : int
+    - droit_buzzer : bool
+    - x : int
+    - y : int
+    + Joueur(lettre: String)
+    + essai(x: int, y: int) : void
+}
+
+class SuperviseurJeu {
+    - plateau : Plateau
+    - joueurs : List<Joueur>
+    - coups_annonces : List<int>
+    - compteurs_coups_reels : List<int>
+    - cible_courante : Cible
+    - liste_cibles : List<Cible>
+    + SuperviseurJeu()
+    + init() : void
+    + new_tour() : void
+    + annoncerNb(joueur: Joueur, nombre: int) : void
+    + deplacement(robot: Robot, direction: String) : void
+    + test_cible_atteinte() : bool
+}
+
+Plateau "1" *-- "256" Case : contient
+Plateau "1" *-- "4" Robot : possède
+Plateau "1" *-- "*" Joueur : possède
+Case --> Border : utilise
+Case "0..1" *-- "1" Cible : possède
+Robot --> Couleur : utilise
+Cible --> Couleur : utilise
+Cible --> Forme : utilise
+SuperviseurJeu *-- Plateau : contrôle
+SuperviseurJeu *-- Joueur : gère
+SuperviseurJeu *-- Cible : utilise
+
+@enduml
