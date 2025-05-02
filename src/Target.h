@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Shape.h"
-#include "Color.h"
+#include "enums/Shape.h"
+#include "enums/Color.h"
 
 class Target {
     

@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <iostream>
-#include "Border.h"
+
+#include "enums/Border.h"
 #include "Target.h"
 
 class Case {
