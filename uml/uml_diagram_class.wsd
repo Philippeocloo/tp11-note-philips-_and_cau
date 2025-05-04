@@ -1,4 +1,4 @@
-@startuml Plateau
+@startuml Board
 
 enum Border {
     O
@@ -20,15 +20,16 @@ enum Forme {
     Croix
     Cercle
     Carre
+    Triangle
 }
 
-class Plateau {
+class Board {
     - cases : List<Case>
     - robots : List<Robot>
     - joueurs : List<Joueur>
     - taille_x : int
     - taille_y : int
-    + Plateau()
+    + Board()
     + initialiser_cases() : void
     + initialiser_robots() : void
     + initialiser_joueurs() : void
@@ -56,6 +57,9 @@ class Robot {
     - couleur : Couleur
     + Robot(x: int, y: int, couleur: Couleur)
     + deplacement(direction: String) : void
+    + setCoordinates(x: int, y: int) : void
+    + getCoordinates() : List<int>
+    + getColor() : Color
 }
 
 class Joueur {
@@ -69,7 +73,7 @@ class Joueur {
 }
 
 class SuperviseurJeu {
-    - plateau : Plateau
+    - plateau : Board
     - joueurs : List<Joueur>
     - coups_annonces : List<int>
     - compteurs_coups_reels : List<int>
@@ -83,15 +87,15 @@ class SuperviseurJeu {
     + test_cible_atteinte() : bool
 }
 
-Plateau "1" *-- "256" Case : contient
-Plateau "1" *-- "4" Robot : possède
-Plateau "1" *-- "*" Joueur : possède
+Board "1" *-- "256" Case : contient
+Board "1" *-- "4" Robot : possède
+Board "1" *-- "*" Joueur : possède
 Case --> Border : utilise
 Case "0..1" *-- "1" Cible : possède
 Robot --> Couleur : utilise
 Cible --> Couleur : utilise
 Cible --> Forme : utilise
-SuperviseurJeu *-- Plateau : contrôle
+SuperviseurJeu *-- Board : contrôle
 SuperviseurJeu *-- Joueur : gère
 SuperviseurJeu *-- Cible : utilise
 

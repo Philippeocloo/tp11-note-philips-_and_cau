@@ -1,10 +1,8 @@
 #include "Target.h"
 
-Target::Target() : m_shape(Shape::Cross), m_color(Color::Red) {} // valeurs par défaut
+Target::Target() : m_shape(Shape::CROSS), m_color(Color::RED) {} // valeurs par défaut
 
-Target::Target(Shape i_shape, Color i_color)
-    : m_shape(i_shape), m_color(i_color) {}
-
+Target::Target(Shape i_shape, Color i_color): m_shape(i_shape), m_color(i_color) {}
 
 // Getters 
 Shape Target::getShape() const {
