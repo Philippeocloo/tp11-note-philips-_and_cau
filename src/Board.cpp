@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Cell.h"
+#include "Target.h"
 #include <iostream>
 #include <random>
 #include <utility>
@@ -19,12 +21,12 @@ void randomize_angles_position(int dist_min, int dist_max, int& nex_index_on_axi
     nex_index_on_axis = dist(rd);
 }
 
-void place_target(Board& board, int i_x, int i_y, std::vector<Target>& all_targets) {
+void place_target(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
     int i = rand() % all_targets.size();
     Target target = all_targets[i];
     i_board.getCases()[indexOfCase(i_board, i_x, i_y)].setTarget(target);
 
-    all_targets.erase (all_targets.begin() + i);
+    all_targets.erase(all_targets.begin() + i);
 }
 
 int indexOfCase(Board& i_board, int x, int y) {
@@ -39,35 +41,35 @@ int indexOfCase(Board& i_board, int x, int y) {
 
 //------------------------------PLATEAU------------------------------------//
 Board::Board() {
-    initialiser_joueurs();
-    initialiser_robots(*this);
-    initialiser_cases();
+    initializePlayers();
+    initializeRobots(*this);
+    initializeCells();
 }
 
 /***
  * @brief Initialise les cases du plateau
  * @details Les cases sont initialisées avec des coordonnées (x, y).
- *          Les cases sont ajoutées à la liste des cases du plateau.
+ *          Les cells sont ajoutées à la liste des cases du plateau.
  */
-void Board::initialiser_cases() {
+void Board::initializeCells() {
     for (int y = 0; y < TAILLE_Y; y++) {
         for (int x = 0; x < TAILLE_X; x++) {
-            Case case_current(x, y);
+            Cell cell_current(x, y);
 
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     Color color = static_cast<Color>(i);
                     Shape shape = static_cast<Shape>(j);
                     Target target(shape, color);
-                    case_current.setTarget(target);
+                    cell_current.setTarget(target);
                 }
             }
-            cases.push_back(case_current);
+            cells.push_back(cell_current);
         }
     }
 }
 
-void Board::place_angles(Board& i_board) {
+void Board::placeAngles(Board& i_board) {
 
     // Etape 1 : Création d'une liste de tous les symboles possibles sauf multicouleur
     std::vector<Target> all_targets; 
@@ -84,13 +86,13 @@ void Board::place_angles(Board& i_board) {
     while (!all_targets.empty()) {
 
         switch (quarter_of_board) {
-            case Quarter::DOWN_LEFT : 
+            cell Quarter::DOWN_LEFT : 
 
                 for (int i = 0; i < 4; i++) {
                     randomize_angles_position(0, 8, x);
                     randomize_angles_position(0, 8, y);
 
-                    // Vérifie si la case un coin / est déjà occupée
+                    // Vérifie si la cell un coin / est déjà occupée
                     while (!(x == 0 && y == 0) || i_board.getCases()[indexOfCase(i_board, x, y)].hasTarget()) {
                             randomize_angles_position(0, 8, x);
                             randomize_angles_position(0, 8, y);
@@ -169,7 +171,7 @@ void Board::place_angles(Board& i_board) {
  *          Les formes sont : CROSS, CIRCLE, SQUARE
  * @note Les robots sont ajoutés à la liste des robots du i_board.
  */
-void Board::initialiser_robots(Board& i_board) {
+void Board::initializeRobots(Board& i_board) {
 
     int x = 0;
     int y = 0;
@@ -191,18 +193,18 @@ void Board::initialiser_robots(Board& i_board) {
 }
 
 /***
- * @brief Initialise les joueurs sur le i_board
- * @details Les joueurs sont initialisés avec des identifiants de 0 à 3.
- *          Les joueurs sont ajoutés à la liste des joueurs du i_board.
+ * @brief Initialise les players sur le i_board
+ * @details Les players sont initialisés avec des identifiants de 0 à 3.
+ *          Les players sont ajoutés à la liste des players du i_board.
  */
-void Board::initialiser_joueurs() {
+void Board::initializePlayers() {
     for (int i = 0; i < 4; ++i) {
-        Joueur joueur(i);
-        joueurs.push_back(joueur);
+        Player player(i);
+        players.push_back(player);
     }
 }
 
-void Board::afficher_i_board() const {
+void Board::printBoard() const {
     std::cout << "Board (" << TAILLE_X << " x " << TAILLE_Y << ")" << std::endl;
     for (int y = 0; y < TAILLE_Y; ++y) {
         for (int x = 0; x < TAILLE_X; ++x) {

@@ -1,16 +1,16 @@
-#include "Case.h"
+#include "Cell.h"
 
-Case::Case(int i_x, int i_y) {
+Cell::Cell(int i_x, int i_y) {
     this->m_x = i_x;
     this->m_y = i_y;
 }
 
 //Getters
-Target Case::getTarget() {
+Target Cell::getTarget() {
     return this->m_target;
 }
 
 //Setters
-void Case::setBorder(Border i_border) {
+void Cell::setBorder(Border i_border) {
     this->m_border = i_border;
 }
