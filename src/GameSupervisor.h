@@ -24,9 +24,15 @@ private :
 public:
     GameSupervisor();
 
-    new_tour();
+    void new_tour();
 
-    annonceNb(Player i_player,int i_number);
+    void announceNb(Player i_player,int i_number);
+
+    void announceAllNb();
+
+    void givePoint(Player & i_player);
+
+    void sort_players();
 
     // Setters
     void  setBoard(const Board& i_board);

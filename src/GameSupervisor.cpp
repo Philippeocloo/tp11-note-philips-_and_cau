@@ -2,17 +2,45 @@
 
 
 GameSupervisor::GameSupervisor(){
-    //init les targets de toutes les couleurs et toutes les shapes
+    // initialiser tous les membres et prendre en paramètre des noms de joueurs
 }
 
-void GameSupervisor::annonceNb(const Player& i_player,const int& i_number){
-    this->m_announced_moves[i_player.getLettre()] = i_number
+void GameSupervisor::announceNb(Player& i_player,const int& i_number){
+    this->m_announced_moves[i_player.getLettre()] = i_number;
+    i_player.setBuzzer(false);
+}
+
+void GameSupervisor::announceAllNb(){
+// do all process in first 60 secs
+//à faire avec Yanis 
 }
 
 void GameSupervisor::new_tour(){
-    //not finished
+    announceAllNb();
+    sort_players();
+
+    for(auto &joueur : this-> m_players){ // parcourir la liste de joueur trié (le premier ayant le plus petit nb de moves)
+        if(!joueur.getBuzzer()){ // si le joueur a donné son nb on lui laisse faire son essai
+            joueur.setBuzzer(true); // redonner le droit de buzzer au joueur pour le prochain tour 
+            if (joueur.tryPlayer()) {  // si il reussit il a un point en plus
+                givePoint(joueur);
+                return ; // on arrête le tour 
+            }
+        }
+    }
+
 }
 
+void GameSupervisor::givePoint(Player &i_player){ // ajouete
+    old_score = i_player.getScore();
+    i_player.setScore(old_score++);
+}
+
+void GameSupervisor::sort_players(){ // trie tous le vecteur player selon l'ordre croissant des nbs donnés. Les derniers sont ceux qui n'ont pas donnés de nbs
+    for ( auto & it : m_announced_moves){
+        //creer un vecteur personne ordonées
+    }
+}
 
 // Setters
 void  GameSupervisor::setBoard(const Board& i_board) { 
