@@ -24,14 +24,14 @@ void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis)
 void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
     int i = rand() % all_targets.size();
     Target target = all_targets[i];
-    i_board.getCases()[indexOfCell(i_board, i_x, i_y)].setTarget(target);
+    i_board.getCells()[indexOfCell(i_board, i_x, i_y)].setTarget(target);
 
     all_targets.erase(all_targets.begin() + i);
 }
 
 int indexOfCell(Board& i_board, int x, int y) {
-    for (int i = 0; i < i_board.getCases().size(); ++i) {
-        if (i_board.getCases()[i].getX() == x && i_board.getCases()[i].getY() == y) {
+    for (int i = 0; i < i_board.getCells().size(); ++i) {
+        if (i_board.getCells()[i].getX() == x && i_board.getCells()[i].getY() == y) {
             return i;
         }
     }
@@ -93,7 +93,7 @@ void Board::placeAngles(Board& i_board) {
                     randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la cell un coin / est déjà occupée
-                    while (!(x == 0 && y == 0) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                    while (!(x == 0 && y == 0) || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
                             randomizeAnglesPosition(0, 8, x);
                             randomizeAnglesPosition(0, 8, y);
                     }
@@ -109,7 +109,7 @@ void Board::placeAngles(Board& i_board) {
                     randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la case un coin / est déjà occupée
-                    while (!(x == 15 && y == 0) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                    while (!(x == 15 && y == 0) || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
                         randomizeAnglesPosition(8, 16, x);
                         randomizeAnglesPosition(0, 8, y);
                     }
@@ -125,7 +125,7 @@ void Board::placeAngles(Board& i_board) {
                     randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la case un coin / est déjà occupée
-                    while (!(x == 0 && y == 15) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                    while (!(x == 0 && y == 15) || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
                         randomizeAnglesPosition(0, 8, x);
                         randomizeAnglesPosition(8, 16, y);
                     }  
@@ -141,7 +141,7 @@ void Board::placeAngles(Board& i_board) {
                     randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la case un coin / est déjà occupée
-                    while (!(x == 15 && y == 15) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                    while (!(x == 15 && y == 15) || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
                         randomizeAnglesPosition(8, 16, x);
                         randomizeAnglesPosition(8, 16, y);
                     }
@@ -157,11 +157,11 @@ void Board::placeAngles(Board& i_board) {
     }
     randomizeAnglesPosition(0, 16, x);
     randomizeAnglesPosition(0, 16, y);
-    while (!i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+    while (!i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
         randomizeAnglesPosition(0, 16, x);
         randomizeAnglesPosition(0, 16, y);
     }
-    i_board.getCases()[indexOfCell(i_board, x, y)].setTarget(Target(Shape::CROSS, Color::MULTICOLOR));
+    i_board.getCells()[indexOfCell(i_board, x, y)].setTarget(Target(Shape::CROSS, Color::MULTICOLOR));
 }
 
 /***
@@ -182,7 +182,7 @@ void Board::initializeRobots(Board& i_board) {
             Shape shape = static_cast<Shape>(j);
             Robot robot(color, shape);
 
-            while (i_board.getCases()[indexOfCell(i_board, x, y)].hasRobot()) {
+            while (i_board.getCells()[indexOfCell(i_board, x, y)].hasRobot()) {
                 randomizeAnglesPosition(0, 16, x);
                 randomizeAnglesPosition(0, 16, y);
             }
