@@ -1,8 +1,8 @@
 #include "GameSupervisor.h"
 
 
-GameSupervisor::GameSupervisor(){
-    // initialiser tous les membres et prendre en paramètre des noms de joueurs
+GameSupervisor::GameSupervisor(std::vector<Player> i_players,Board i_board ){
+    // initialiser les membres et prendre en paramètre des noms de joueurs
 }
 
 void GameSupervisor::announceNb(Player& i_player,const int& i_number){
@@ -12,23 +12,24 @@ void GameSupervisor::announceNb(Player& i_player,const int& i_number){
 
 void GameSupervisor::announceAllNb(){
 // do all process in first 60 secs
-//à faire avec Yanis 
+//à faire avec Yanis (dépendant de la partie graphique)
 }
 
 void GameSupervisor::new_tour(){
-    announceAllNb();
-    sort_players();
 
-    for(auto &joueur : this-> m_players){ // parcourir la liste de joueur trié (le premier ayant le plus petit nb de moves)
-        if(!joueur.getBuzzer()){ // si le joueur a donné son nb on lui laisse faire son essai
+    announceAllNb();
+
+    std::vector<Player> sorted_players = sort_players();
+
+    for(auto &joueur : sorted_players){ // parcourir la liste de joueur trié (le premier ayant le plus petit nb de moves)
             joueur.setBuzzer(true); // redonner le droit de buzzer au joueur pour le prochain tour 
             if (joueur.tryPlayer()) {  // si il reussit il a un point en plus
                 givePoint(joueur);
-                return ; // on arrête le tour 
+                return ; // on arrête le tour sinon on continue avec les autres joueurs
             }
-        }
     }
 
+    return;
 }
 
 void GameSupervisor::givePoint(Player &i_player){ // ajouete
@@ -36,10 +37,26 @@ void GameSupervisor::givePoint(Player &i_player){ // ajouete
     i_player.setScore(old_score++);
 }
 
-void GameSupervisor::sort_players(){ // trie tous le vecteur player selon l'ordre croissant des nbs donnés. Les derniers sont ceux qui n'ont pas donnés de nbs
-    for ( auto & it : m_announced_moves){
-        //creer un vecteur personne ordonées
+std::vector<Player> GameSupervisor::sort_players() {
+
+    // Convertir la map en vecteur de paires pour le tri
+    std::vector<std::pair<Player, int>> vec(this->m_announced_moves.begin(), this->m_announced_moves.end());
+
+    // Trier par valeur 
+    std::sort(vec.begin(), vec.end(),
+        [](const auto& a, const auto& b) { // fonction lambda pour comparer les nombres (élément 2 chaque paire)
+            return a.second < b.second;
+        });
+
+    // Extraire les joueurs dans un nouveau vecteur ordonné
+    std::vector<Player> sorted_players;
+
+    for (const auto& pair : vec) {
+        sorted_players.push_back(pair.first);
     }
+
+    return sorted_players;
+
 }
 
 // Setters
@@ -51,11 +68,11 @@ void  GameSupervisor::setPlayers(const std::vector<Player>& i_player) {
     this-> m_players = i_player; 
 }
 
-void  GameSupervisor::setCoupsAnnonces(const std::map<std::string, int>& i_announced_moves) { 
+void  GameSupervisor::setCoupsAnnonces(const std::map<Player, int>& i_announced_moves) { 
     this-> m_announced_moves = i_announced_moves; 
 }
 
-void  GameSupervisor::setCompteursCoupsReels(const std::map<std::string, int>& i_real_movements_counter) { 
+void  GameSupervisor::setCompteursCoupsReels(const std::map<Player, int>& i_real_movements_counter) { 
     this-> m_real_movements_counter = i_real_movements_counter; 
 }
 
@@ -76,11 +93,11 @@ std::vector<Player> GameSupervisor::getPlayers() const {
     return this-> players; 
 }
 
-std::map<std::string, int> GameSupervisor::getCoupsAnnonces() const { 
+std::map<Player, int> GameSupervisor::getCoupsAnnonces() const { 
     return this-> announced_moves; 
 }
 
-std::map<std::string, int> GameSupervisor::getCompteursCoupsReels() const { 
+std::map<Player, int> GameSupervisor::getCompteursCoupsReels() const { 
     return this-> real_movements_counter; 
 }
 
