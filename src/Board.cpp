@@ -14,22 +14,22 @@ enum Quarter {
 };
 
 //-------------------------------TOOLS FUNCTIONS----------------------------------//
-void randomize_angles_position(int dist_min, int dist_max, int& nex_index_on_axis) {
+void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis) {
     std::random_device rd;
     std::uniform_int_distribution<int> dist(dist_min, dist_max);
 
     nex_index_on_axis = dist(rd);
 }
 
-void place_target(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
+void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
     int i = rand() % all_targets.size();
     Target target = all_targets[i];
-    i_board.getCases()[indexOfCase(i_board, i_x, i_y)].setTarget(target);
+    i_board.getCases()[indexOfCell(i_board, i_x, i_y)].setTarget(target);
 
     all_targets.erase(all_targets.begin() + i);
 }
 
-int indexOfCase(Board& i_board, int x, int y) {
+int indexOfCell(Board& i_board, int x, int y) {
     for (int i = 0; i < i_board.getCases().size(); ++i) {
         if (i_board.getCases()[i].getX() == x && i_board.getCases()[i].getY() == y) {
             return i;
@@ -86,18 +86,18 @@ void Board::placeAngles(Board& i_board) {
     while (!all_targets.empty()) {
 
         switch (quarter_of_board) {
-            cell Quarter::DOWN_LEFT : 
+            case Quarter::DOWN_LEFT : 
 
                 for (int i = 0; i < 4; i++) {
-                    randomize_angles_position(0, 8, x);
-                    randomize_angles_position(0, 8, y);
+                    randomizeAnglesPosition(0, 8, x);
+                    randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la cell un coin / est déjà occupée
-                    while (!(x == 0 && y == 0) || i_board.getCases()[indexOfCase(i_board, x, y)].hasTarget()) {
-                            randomize_angles_position(0, 8, x);
-                            randomize_angles_position(0, 8, y);
+                    while (!(x == 0 && y == 0) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                            randomizeAnglesPosition(0, 8, x);
+                            randomizeAnglesPosition(0, 8, y);
                     }
-                    place_target(i_board, x, y, all_targets);
+                    placeTarget(i_board, x, y, all_targets);
                 }
                 quarter_of_board = Quarter::DOWN_RIGHT; // On passe au quarter suivant
                 break;
@@ -105,15 +105,15 @@ void Board::placeAngles(Board& i_board) {
             case Quarter::DOWN_RIGHT : 
 
                 for (int i = 0; i < 4; i++) {
-                    randomize_angles_position(8, 16, x);
-                    randomize_angles_position(0, 8, y);
+                    randomizeAnglesPosition(8, 16, x);
+                    randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la case un coin / est déjà occupée
-                    while (!(x == 15 && y == 0) || i_board.getCases()[indexOfCase(i_board, x, y)].hasTarget()) {
-                        randomize_angles_position(8, 16,x);
-                        randomize_angles_position(0, 8, y);
+                    while (!(x == 15 && y == 0) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                        randomizeAnglesPosition(8, 16, x);
+                        randomizeAnglesPosition(0, 8, y);
                     }
-                    place_target(i_board, x, y, all_targets);
+                    placeTarget(i_board, x, y, all_targets);
                 }
                 quarter_of_board = Quarter::UP_LEFT;
                 break;
@@ -121,15 +121,15 @@ void Board::placeAngles(Board& i_board) {
             case Quarter::UP_LEFT: 
 
                 for (int i = 0; i < 4; i++) {
-                    randomize_angles_position(8, 16, x);
-                    randomize_angles_position(0, 8, y);
+                    randomizeAnglesPosition(8, 16, x);
+                    randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la case un coin / est déjà occupée
-                    while (!(x == 0 && y == 15) || i_board.getCases()[indexOfCase(i_board, x, y)].hasTarget()) {
-                        randomize_angles_position(0, 8, x);
-                        randomize_angles_position(8, 16, y);
+                    while (!(x == 0 && y == 15) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                        randomizeAnglesPosition(0, 8, x);
+                        randomizeAnglesPosition(8, 16, y);
                     }  
-                    place_target(i_board, x, y, all_targets);
+                    placeTarget(i_board, x, y, all_targets);
                 }  
                 quarter_of_board = Quarter::UP_RIGHT;
                 break;
@@ -137,15 +137,15 @@ void Board::placeAngles(Board& i_board) {
             case Quarter::UP_RIGHT: 
 
                 for (int i = 0; i < 4; i++) {
-                    randomize_angles_position(8, 16, x);
-                    randomize_angles_position(0, 8, y);
+                    randomizeAnglesPosition(8, 16, x);
+                    randomizeAnglesPosition(0, 8, y);
 
                     // Vérifie si la case un coin / est déjà occupée
-                    while (!(x == 15 && y == 15) || i_board.getCases()[indexOfCase(i_board, x, y)].hasTarget()) {
-                        randomize_angles_position(8, 16, x);
-                        randomize_angles_position(8, 16, y);
+                    while (!(x == 15 && y == 15) || i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+                        randomizeAnglesPosition(8, 16, x);
+                        randomizeAnglesPosition(8, 16, y);
                     }
-                    place_target(i_board, x, y, all_targets);
+                    placeTarget(i_board, x, y, all_targets);
                 }
                 break;
             
@@ -155,13 +155,13 @@ void Board::placeAngles(Board& i_board) {
         }
 
     }
-    randomize_angles_position(0, 16, x);
-    randomize_angles_position(0, 16, y);
-    while (!i_board.getCases()[indexOfCase(i_board, x, y)].hasTarget()) {
-        randomize_angles_position(0, 16, x);
-        randomize_angles_position(0, 16, y);
+    randomizeAnglesPosition(0, 16, x);
+    randomizeAnglesPosition(0, 16, y);
+    while (!i_board.getCases()[indexOfCell(i_board, x, y)].hasTarget()) {
+        randomizeAnglesPosition(0, 16, x);
+        randomizeAnglesPosition(0, 16, y);
     }
-    i_board.getCases()[indexOfCase(i_board, x, y)].setTarget(Target(Shape::CROSS, Color::MULTICOLOR));
+    i_board.getCases()[indexOfCell(i_board, x, y)].setTarget(Target(Shape::CROSS, Color::MULTICOLOR));
 }
 
 /***
@@ -182,10 +182,10 @@ void Board::initializeRobots(Board& i_board) {
             Shape shape = static_cast<Shape>(j);
             Robot robot(color, shape);
 
-            while (i_board.getCases()[indexOfCase(i_board, x, y)].hasRobot()) {
-                randomize_angles_position(0, 16, x);
-                randomize_angles_position(0, 16, y);
-        }
+            while (i_board.getCases()[indexOfCell(i_board, x, y)].hasRobot()) {
+                randomizeAnglesPosition(0, 16, x);
+                randomizeAnglesPosition(0, 16, y);
+            }
             robot.setPosition(0, 0); // Position initiale du robot
             robots.push_back(robot);
         }
