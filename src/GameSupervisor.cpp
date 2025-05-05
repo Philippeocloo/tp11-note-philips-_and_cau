@@ -3,6 +3,8 @@
 
 GameSupervisor::GameSupervisor(std::vector<Player> i_players,Board i_board ){
     // initialiser les membres et prendre en paramètre des noms de joueurs
+    this->m_players = i_players;
+    this->m_board = i_board;    
 }
 
 void GameSupervisor::announceNb(Player& i_player,const int& i_number){
@@ -17,7 +19,7 @@ void GameSupervisor::announceAllNb(){
 
 void GameSupervisor::new_tour(){
 
-    announceAllNb();
+    announceAllNb(); // premieres 60 sec
 
     std::vector<Player> sorted_players = sort_players();
 
@@ -32,12 +34,12 @@ void GameSupervisor::new_tour(){
     return;
 }
 
-void GameSupervisor::givePoint(Player &i_player){ // ajouete
+void GameSupervisor::givePoint(Player &i_player){ // ajouter un point au joueur gagnant
     old_score = i_player.getScore();
     i_player.setScore(old_score++);
 }
 
-std::vector<Player> GameSupervisor::sort_players() {
+std::vector<Player> GameSupervisor::sort_players() { // trier les joueurs en fonction de leur nombre de coups annoncés
 
     // Convertir la map en vecteur de paires pour le tri
     std::vector<std::pair<Player, int>> vec(this->m_announced_moves.begin(), this->m_announced_moves.end());
