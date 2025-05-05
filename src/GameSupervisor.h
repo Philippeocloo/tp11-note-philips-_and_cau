@@ -3,11 +3,13 @@
 #include "Board.h"
 #include "Player.h"
 #include "Target.h"
-#include "Robot.h"
+//#include "Robot.h"
 
 #include <vector>
 #include <map>
 #include <string>
+#include <iostream>
+#include <conio.h>
 
 class GameSupervisor{
 
@@ -25,11 +27,6 @@ public:
     new_tour();
 
     annonceNb(Player i_player,int i_number);
-
-    move(Robot i_robot, String i_direction);
-
-    bool test_target_reached() const;
-
 
     // Setters
     void  setBoard(const Board& i_board);

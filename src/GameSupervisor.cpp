@@ -9,23 +9,10 @@ void GameSupervisor::annonceNb(const Player& i_player,const int& i_number){
     this->m_announced_moves[i_player.getLettre()] = i_number
 }
 
-void GameSupervisor::move(Robot& i_robot, const String&  i_direction){
-    i_robot.move(i_direction)
-}
-
 void GameSupervisor::new_tour(){
     //not finished
 }
 
-bool GameSupervisor::test_target_reached() const {
-    //Target* ptr_current_target = &current_target; //pas sûr que c'est la bonne manière
-
-    //trouver les coordonnées du robot principal 
-
-    //trouver les coordonnées de la target actu sur le board en passant par la shape et la couleur
-
-    //comparer les coordonnés et sortir le bool
-}
 
 // Setters
 void  GameSupervisor::setBoard(const Board& i_board) { 
