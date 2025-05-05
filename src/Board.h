@@ -27,4 +27,9 @@ class Board {
         std::vector<Cell>& getCases() { return cells; };
         const std::vector<Robot>& getRobots() const { return robots; }; // Ajout de const
         const std::vector<Player>& getPlayers() const { return players; }; // Ajout de const
+
+        void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);
+        void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets);
+        int indexOfCell(Board& i_board, int x, int y);
+
 };
