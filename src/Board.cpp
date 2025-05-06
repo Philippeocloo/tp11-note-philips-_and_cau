@@ -14,14 +14,14 @@ enum Quarter {
 };
 
 //-------------------------------TOOLS FUNCTIONS----------------------------------//
-void randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_on_axis) {
+void Board::randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_on_axis) {
     std::random_device rd;
     std::uniform_int_distribution<int> dist(dist_min, dist_max);
 
     new_index_on_axis = dist(rd);
 }
 
-void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
+void Board::placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
     int i = rand() % all_targets.size();
     Target target = all_targets[i];
     i_board.getCells()[indexOfCell(i_board, i_x, i_y)].setTarget(target);
@@ -29,11 +29,11 @@ void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targ
     all_targets.erase(all_targets.begin() + i);
 }
 
-void placeBorder(Board& i_board, int i_x, int i_y, Border i_border) {
+void Board::placeBorder(Board& i_board, int i_x, int i_y, Border i_border) {
     i_board.getCells()[indexOfCell(i_board, i_x, i_y)].setBorder(i_border);
 }
 
-int indexOfCell(Board& i_board, int x, int y) {
+int Board::indexOfCell(Board& i_board, int x, int y) {
     for (int i = 0; i < i_board.getCells().size(); ++i) {
         if (i_board.getCells()[i].getX() == x && i_board.getCells()[i].getY() == y) {
             return i;
