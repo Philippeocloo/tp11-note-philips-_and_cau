@@ -25,8 +25,8 @@ void Robot::setCell(Cell& i_newCell) {
 }
 
 bool Robot::checkifobstacle(Direction dir, Board& i_board){
-    int X = Robot::getCell().getX();
-    int Y = Robot::getCell().getY();
+    int X = m_cell.getX();
+    int Y = m_cell.getY();
 
     switch (dir) {
         case Direction::UP: Y++; break;
@@ -39,7 +39,7 @@ bool Robot::checkifobstacle(Direction dir, Board& i_board){
     if(index < 0 ){
         return true;
     }
-    Cell target_cell = i_board.getCases()[index];
+    Cell target_cell = i_board.getCells()[index]; 
     if(target_cell.hasRobot() || target_cell.hasTarget() ){
          return true;
     }
@@ -64,7 +64,7 @@ void Robot::move(Direction i_direction, Board& i_board){
 
         int index_cell = i_board.indexOfCell(i_board, x, y);
         if (index_cell >= 0) {
-            setCell(i_board.getCases()[index_cell]);
+            setCell(i_board.getCells()[index_cell]);
         } else {
             break; 
         }
