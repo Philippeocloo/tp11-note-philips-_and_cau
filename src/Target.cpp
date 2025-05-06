@@ -22,3 +22,8 @@ void Target::setShape(Shape i_shape) {
 void Target::setColor(Color i_color) {
     m_color = i_color;
 }
+
+//Surchage
+bool Target::operator==(const Target& other) const {
+    return m_shape == other.m_shape && m_color == other.m_color;
+}
