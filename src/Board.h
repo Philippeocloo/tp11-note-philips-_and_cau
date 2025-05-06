@@ -30,6 +30,7 @@ class Board {
 
         void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);
         void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets);
+        
         int indexOfCell(Board& i_board, int x, int y);
 
 };
