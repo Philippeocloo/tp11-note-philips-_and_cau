@@ -29,7 +29,7 @@ void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targ
     all_targets.erase(all_targets.begin() + i);
 }
 
-int indexOfCell(Board& i_board, int x, int y) {
+int Board::indexOfCell(Board& i_board, int x, int y) {
     for (int i = 0; i < i_board.getCells().size(); ++i) {
         if (i_board.getCells()[i].getX() == x && i_board.getCells()[i].getY() == y) {
             return i;
