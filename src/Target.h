@@ -18,4 +18,6 @@ public:
 
     void setShape(Shape i_shape);
     void setColor(Color i_color);
+
+    bool operator==(const Target& other) const;
 };

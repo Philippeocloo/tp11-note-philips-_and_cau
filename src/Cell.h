@@ -41,8 +41,9 @@ public:
         m_hasTarget = true;
     }
 
-    void setRobot(Robot i_robot) { 
-        m_robot = i_robot; 
+
+    void setRobot(Robot i_robot, bool i_hasRobot) { 
+        m_robot = i_hasRobot; 
         m_hasRobot = true; 
     }
 

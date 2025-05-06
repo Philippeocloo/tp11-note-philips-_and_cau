@@ -1,31 +1,81 @@
 #include "Robot.h"
+#include "Cell.h"
+#include "Board.h"
+#include "Target.h"
+#include "enums/Direction.h"
+#include "enums/Border.h"
+#include "enums/Shape.h"
 #include <iostream>
 
-Robot::Robot(int i_x, int i_y, Color i_color)
-    : m_x(i_x), m_y(i_y), m_color(i_color) {}
 
-void Robot::move(const std::string& direction) {
-    if (direction == "up") {
-        m_y -= 1;
-    } else if (direction == "down") {
-        m_y += 1;
-    } else if (direction == "left") {
-        m_x -= 1;
-    } else if (direction == "right") {
-        m_x += 1;
-    } else {
-        std::cerr << "Erreur " << direction << std::endl;
-    }
+Robot::Robot(Color i_color, Cell i_cell): m_color(i_color), m_cell(i_cell) {}
+
+
+Cell Robot::getCell() {
+    return m_cell;
 }
 
-int Robot::getX() const {
-    return m_x;
-}
-
-int Robot::getY() const {
-    return m_y;
-}
 
 Color Robot::getCouleur() const {
     return m_color;
+}
+
+void Robot::setCell(Cell& i_newCell) {
+    m_cell = i_newCell;
+}
+
+bool Robot::checkifobstacle(Direction dir, Board& i_board){
+    int X = Robot::getCell().getX();
+    int Y = Robot::getCell().getY();
+
+    switch (dir) {
+        case Direction::UP: Y++; break;
+        case Direction::DOWN: Y--; break;
+        case Direction::LEFT: X--; break;
+        case Direction::RIGHT: X++; break;
+        default: return true;
+    }
+    int index = i_board.indexOfCell(i_board, X, Y);
+    if(index < 0 ){
+        return true;
+    }
+    Cell target_cell = i_board.getCases()[index];
+    if(target_cell.hasRobot() || target_cell.hasTarget() ){
+         return true;
+    }
+    else {
+        return false;
+    }
+}
+
+void Robot::move(Direction i_direction, Board& i_board){
+    while (!checkifobstacle(i_direction, i_board)) {
+        int x = m_cell.getX();
+        int y = m_cell.getY();
+
+        // Calculer la nouvelle position
+        switch (i_direction) {
+            case Direction::UP:    y++; break;
+            case Direction::DOWN:  y--; break;
+            case Direction::LEFT:  x--; break;
+            case Direction::RIGHT: x++; break;
+            default: break;
+        }
+
+        int index_cell = i_board.indexOfCell(i_board, x, y);
+        if (index_cell >= 0) {
+            setCell(i_board.getCases()[index_cell]);
+        } else {
+            break; 
+        }
+    }
+}
+
+bool Robot::onTarget(Target i_target) {
+    Target currentTarget = m_cell.getTarget();
+
+    if (currentTarget == i_target && m_color == i_target.getColor()) {
+        return true;
+    }   
+    return false;
 }

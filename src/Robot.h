@@ -1,21 +1,29 @@
 #pragma once
 
 #include "enums/Color.h"
+#include "enums/Color.h"
+#include "enums/Direction.h"
+#include "Cell.h"
+#include "Target.h"
 
-#include "string"
 
 class Robot {
 private:
-    int m_x;
-    int m_y;
     Color m_color;
+    Cell m_cell;
 
 public:
-    Robot(int i_x, int i_y, Color i_couleur);
-    void move(const std::string& i_direction);
+    Robot(Color i_couleur, Cell i_cell);
+    bool checkifobstacle(Direction dir,Board& i_board);
+    bool onTarget(Target i_target);
+    void move(Direction i_direction, Board& i_board);
+    
+
+    //Setteurs
+
+    void setCell(Cell& i_cell);
 
     //Guetteurs
-    int getX() const;
-    int getY() const;
+    Cell getCell();
     Color getCouleur() const;
 };
