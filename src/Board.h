@@ -24,7 +24,7 @@ class Board {
         void initializePlayers();
         void printBoard() const;
 
-        std::vector<Cell>& getCases() { return cells; };
+        std::vector<Cell>& getCells() { return cells; };
         const std::vector<Robot>& getRobots() const { return robots; }; // Ajout de const
         const std::vector<Player>& getPlayers() const { return players; }; // Ajout de const
 
