@@ -26,7 +26,7 @@ public:
 
     GameSupervisor(std::vector<Player> i_players,Board i_board );
 
-    void new_tour();
+    void newTour();
 
     void announceNb(Player i_player,int i_number);
 
@@ -34,7 +34,7 @@ public:
 
     void givePoint(Player & i_player);
 
-    std::vector<Player> sort_players();
+    std::vector<Player> sortPlayers();
 
     // Setters
     void  setBoard(const Board& i_board);

@@ -17,11 +17,11 @@ void GameSupervisor::announceAllNb(){
 //à faire avec Yanis (dépendant de la partie graphique)
 }
 
-void GameSupervisor::new_tour(){
+void GameSupervisor::newTour(){
 
     announceAllNb(); // premieres 60 sec
 
-    std::vector<Player> sorted_players = sort_players();
+    std::vector<Player> sorted_players = sortPlayers();
 
     for(auto &joueur : sorted_players){ // parcourir la liste de joueur trié (le premier ayant le plus petit nb de moves)
             joueur.setBuzzer(true); // redonner le droit de buzzer au joueur pour le prochain tour 
@@ -39,7 +39,7 @@ void GameSupervisor::givePoint(Player &i_player){ // ajouter un point au joueur 
     i_player.setScore(old_score++);
 }
 
-std::vector<Player> GameSupervisor::sort_players() { // trier les joueurs en fonction de leur nombre de coups annoncés
+std::vector<Player> GameSupervisor::sortPlayers() { // trier les joueurs en fonction de leur nombre de coups annoncés
 
     // Convertir la map en vecteur de paires pour le tri
     std::vector<std::pair<Player, int>> vec(this->m_announced_moves.begin(), this->m_announced_moves.end());
