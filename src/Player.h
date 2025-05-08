@@ -1,10 +1,17 @@
+#pragma once
+
 #include <string>
 #include "Target.h"
+#include "Board.h"
+#include "enums/Direction.h"
 
 struct MoveResult {
     Direction direction;
     int robotIndex;
 };
+
+class Board;
+
 class Player {
 private:
     std::string m_lettre;
@@ -17,8 +24,8 @@ private:
 public:
     Player(const std::string& lettre);
 
-    MoveResult Player::giveTry(Board& i_board, std::vector<Robot>& robots);
-    bool tryPlayer(int i_tries, Target i_target, Board& i_board, std::vector<Robot>& robots);
+    MoveResult giveTry(Board* i_board, std::vector<Robot>& robots);
+    bool tryPlayer(int i_tries, Target i_target, Board* i_board, std::vector<Robot>& robots);
 
     // Guetteurs
     std::string getLettre() const;

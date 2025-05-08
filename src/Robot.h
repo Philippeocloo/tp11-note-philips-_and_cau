@@ -6,24 +6,26 @@
 #include "Cell.h"
 #include "Target.h"
 
+class Cell;
+class Board;
 
 class Robot {
 private:
-    Color m_color;
-    Cell m_cell;
+    RColor m_color;
+    Cell* m_cell;
 
 public:
-    Robot(Color i_couleur, Cell i_cell);
-    bool checkifobstacle(Direction dir,Board& i_board);
+    Robot(RColor i_couleur, Cell* i_cell);
+    bool checkifobstacle(Direction dir,Board* i_board);
     bool onTarget(Target i_target);
-    void move(Direction i_direction, Board& i_board);
+    void move(Direction i_direction, Board* i_board);
     
 
     //Setteurs
 
-    void setCell(Cell& i_cell);
+    void setCell(Cell* i_cell);
 
     //Guetteurs
-    Cell getCell();
-    Color getCouleur() const;
+    Cell* getCell();
+    RColor getColor() const;
 };

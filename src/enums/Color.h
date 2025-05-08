@@ -1,6 +1,7 @@
 #pragma once
 
-enum class Color {
+//Evite le conflit avec raylib en préfixant l'énum Color -> RColor
+enum class RColor {
     RED         = 0,
     BLUE        = 1,
     YELLOW      = 2,

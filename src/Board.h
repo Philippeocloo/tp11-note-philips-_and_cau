@@ -5,14 +5,14 @@
 #include "Robot.h"
 #include "Player.h"
 
+#define TAILLE_X 16
+#define TAILLE_Y 16
+
 class Board {
     private:
         std::vector<Cell> cells;
         std::vector<Robot> robots;
         std::vector<Player> players;
-        
-        int const TAILLE_X = 16;
-        int const TAILLE_Y = 16;
         
     public:
         Board();
@@ -29,8 +29,6 @@ class Board {
         const std::vector<Player>& getPlayers() const { return players; }; // Ajout de const
 
         void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);
-        void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets);
         
-        int indexOfCell(Board& i_board, int x, int y);
-
 };
+int indexOfCell(Board* i_board, int x, int y);

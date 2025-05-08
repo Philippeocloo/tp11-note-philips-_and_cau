@@ -7,13 +7,15 @@
 #include "Target.h"
 #include "Robot.h"
 
+class Robot;
+
 class Cell {
 private:
     int m_x;
     int m_y;
 
     Border m_border;
-    Robot m_robot;
+    Robot* m_robot;
     Target m_target;
 
     bool m_hasRobot = false;
@@ -41,14 +43,13 @@ public:
         m_hasTarget = true;
     }
 
-    void setRobot(Robot i_robot, bool i_hasRobot) { 
+    void setRobot(Robot* i_robot) { 
         m_robot = i_robot; 
-        m_hasRobot = i_hasRobot; 
     }
 
 // Autres
     bool hasTarget() const { return m_hasTarget; }; 
     
-    bool hasRobot() const { return m_hasRobot; };
+    bool hasRobot() const { return m_robot != nullptr; };
 
 };

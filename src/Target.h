@@ -7,17 +7,17 @@ class Target {
     
 private:
     Shape m_shape;
-    Color m_color;
+    RColor m_color;
 
 public:
     Target();
-    Target(Shape i_shape, Color i_color);
+    Target(Shape i_shape, RColor i_color);
 
     Shape getShape() const;
-    Color getColor() const;
+    RColor getColor() const;
 
     void setShape(Shape i_shape);
-    void setColor(Color i_color);
+    void setColor(RColor i_color);
 
     bool operator==(const Target& other) const;
 };

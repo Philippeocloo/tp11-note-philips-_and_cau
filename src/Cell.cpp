@@ -5,11 +5,6 @@ Cell::Cell(int i_x, int i_y) {
     this->m_y = i_y;
 }
 
-//Getters
-Target Cell::getTarget() {
-    return this->m_target;
-}
-
 //Setters
 void Cell::setBorder(Border i_border) {
     this->m_border = i_border;

@@ -8,25 +8,25 @@
 #include <iostream>
 
 
-Robot::Robot(Color i_color, Cell i_cell): m_color(i_color), m_cell(i_cell) {}
+Robot::Robot(RColor i_color, Cell* i_cell): m_color(i_color), m_cell(i_cell) {}
 
 
-Cell Robot::getCell() {
+Cell* Robot::getCell() {
     return m_cell;
 }
 
 
-Color Robot::getCouleur() const {
+RColor Robot::getColor() const {
     return m_color;
 }
 
-void Robot::setCell(Cell& i_newCell) {
+void Robot::setCell(Cell* i_newCell) {
     m_cell = i_newCell;
 }
 
-bool Robot::checkifobstacle(Direction dir, Board& i_board){
-    int X = m_cell.getX();
-    int Y = m_cell.getY();
+bool Robot::checkifobstacle(Direction dir, Board* i_board){
+    int X = m_cell->getX();
+    int Y = m_cell->getY();
 
     switch (dir) {
         case Direction::UP: Y++; break;
@@ -35,11 +35,11 @@ bool Robot::checkifobstacle(Direction dir, Board& i_board){
         case Direction::RIGHT: X++; break;
         default: return true;
     }
-    int index = i_board.indexOfCell(i_board, X, Y);
+    int index = indexOfCell(i_board, X, Y);
     if(index < 0 ){
         return true;
     }
-    Cell target_cell = i_board.getCells()[index]; 
+    Cell target_cell = i_board->getCells()[index]; 
     if(target_cell.hasRobot() || target_cell.hasTarget() ){
          return true;
     }
@@ -48,10 +48,10 @@ bool Robot::checkifobstacle(Direction dir, Board& i_board){
     }
 }
 
-void Robot::move(Direction i_direction, Board& i_board){
+void Robot::move(Direction i_direction, Board* i_board){
     while (!checkifobstacle(i_direction, i_board)) {
-        int x = m_cell.getX();
-        int y = m_cell.getY();
+        int x = m_cell->getX();
+        int y = m_cell->getY();
 
         // Calculer la nouvelle position
         switch (i_direction) {
@@ -62,9 +62,9 @@ void Robot::move(Direction i_direction, Board& i_board){
             default: break;
         }
 
-        int index_cell = i_board.indexOfCell(i_board, x, y);
+        int index_cell = indexOfCell(i_board, x, y);
         if (index_cell >= 0) {
-            setCell(i_board.getCells()[index_cell]);
+            setCell(i_board->getCells()[index_cell]);
         } else {
             break; 
         }

@@ -29,13 +29,13 @@ void Board::placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& a
     all_targets.erase(all_targets.begin() + i);
 }
 
-void Board::placeBorder(Board& i_board, int i_x, int i_y, Border i_border) {
+void placeBorder(Board& i_board, int i_x, int i_y, Border i_border) {
     i_board.getCells()[indexOfCell(i_board, i_x, i_y)].setBorder(i_border);
 }
 
-int Board::indexOfCell(Board& i_board, int x, int y) {
-    for (int i = 0; i < i_board.getCells().size(); ++i) {
-        if (i_board.getCells()[i].getX() == x && i_board.getCells()[i].getY() == y) {
+int indexOfCell(Board* i_board, int x, int y) {
+    for (int i = 0; i < i_board->getCells().size(); ++i) {
+        if (i_board->getCells()[i].getX() == x && i_board->getCells()[i].getY() == y) {
             return i;
         }
     }
@@ -79,7 +79,7 @@ void Board::placeAngles(Board& i_board) {
     std::vector<Target> all_targets; 
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            all_targets.push_back(Target(static_cast<Shape>(i), static_cast<Color>(j)));
+            all_targets.push_back(Target(static_cast<Shape>(i), static_cast<RColor>(j)));
         }
     }
     
@@ -184,7 +184,7 @@ void Board::placeAngles(Board& i_board) {
     }
     randomizeAnglesPosition(0, 15, x);
     randomizeAnglesPosition(0, 15, y);
-    while ((x == 0 && y == 0) || (x == 15 && y == 15) ||) i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
+    while ((x == 0 && y == 0) || (x == 15 && y == 15) || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
         randomizeAnglesPosition(0, 15, x);
         randomizeAnglesPosition(0, 15, y);
     }
@@ -207,7 +207,6 @@ void Board::initializeRobots(Board& i_board) {
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             Color color = static_cast<Color>(i);
-            Shape shape = static_cast<Shape>(j);
             Robot robot(color);
 
             while (i_board.getCells()[indexOfCell(i_board, x, y)].hasRobot()) {

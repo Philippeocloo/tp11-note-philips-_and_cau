@@ -67,7 +67,7 @@ char getch() {
 }
 
 
-MoveResult Player::giveTry(Board& i_board, std::vector<Robot>& robots){
+MoveResult Player::giveTry(Board* i_board, std::vector<Robot>& robots){
 
      std::cout << "Choisis le numéro du robot : ";
     int index;
@@ -97,18 +97,15 @@ MoveResult Player::giveTry(Board& i_board, std::vector<Robot>& robots){
 
             if (dir != Direction::NONE) {
                 selectedRobot.move(dir, i_board);
-                std::cout << "Position : (" << selectedRobot.getCell().getX()
-                          << ", " << selectedRobot.getCell().getY() << ")\n";
+                std::cout << "Position : (" << selectedRobot.getCell()->getX()
+                          << ", " << selectedRobot.getCell()->getY() << ")\n";
                 return {dir, index};
             }
         }
     }
 }
 
-
-
-
-bool Player::tryPlayer(int i_tries, Target i_target, Board& i_board, std::vector<Robot>& robots) {
+bool Player::tryPlayer(int i_tries, Target i_target, Board* i_board, std::vector<Robot>& robots) {
     while (i_tries > 0) {
         std::cout << "\nMouvements restants : " << i_tries << std::endl;
 
