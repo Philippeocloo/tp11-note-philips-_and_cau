@@ -2,7 +2,6 @@
 
 #include <string>
 #include "Target.h"
-#include "Board.h"
 #include "enums/Direction.h"
 
 struct MoveResult {
@@ -14,7 +13,7 @@ class Board;
 
 class Player {
 private:
-    std::string m_lettre;
+    char m_lettre;
     int m_points;
     bool m_buzzer;
     int m_x;
@@ -22,13 +21,17 @@ private:
     int m_score;
 
 public:
-    Player(const std::string& lettre);
+    Player(const char lettre);
 
+    //TODO: Je suis pas certain que ce soit le bon endroit pour ces fonctions (et elles empechent la compilation (interdépendance avec Board.h))
+    /*
     MoveResult giveTry(Board* i_board, std::vector<Robot>& robots);
     bool tryPlayer(int i_tries, Target i_target, Board* i_board, std::vector<Robot>& robots);
+    */
+    
 
     // Guetteurs
-    std::string getLettre() const;
+    char getLettre() const;
     int getPoints() const;
     bool getBuzzer() const;
     int getX() const;

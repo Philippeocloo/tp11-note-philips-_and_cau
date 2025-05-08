@@ -10,7 +10,7 @@
 
 class Board {
     private:
-        std::vector<Cell> cells;
+        Cell cells[TAILLE_X][TAILLE_Y];
         std::vector<Robot> robots;
         std::vector<Player> players;
         
@@ -19,16 +19,14 @@ class Board {
 
         void initializeCells();
         void placeAngles(Board& i_board);
-        void placeTargets();
         void initializeRobots(Board& i_board);
         void initializePlayers();
         void printBoard() const;
 
-        std::vector<Cell>& getCells() { return cells; };
+        Cell** getCells() { return (Cell**)cells; };
         const std::vector<Robot>& getRobots() const { return robots; }; // Ajout de const
         const std::vector<Player>& getPlayers() const { return players; }; // Ajout de const
 
         void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);
         
 };
-int indexOfCell(Board* i_board, int x, int y);

@@ -21,26 +21,18 @@ void Board::randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_o
     new_index_on_axis = dist(rd);
 }
 
-void Board::placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
+void placeTarget(Board& i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
     int i = rand() % all_targets.size();
     Target target = all_targets[i];
-    i_board.getCells()[indexOfCell(i_board, i_x, i_y)].setTarget(target);
+    i_board.getCells()[i_x][i_y].setTarget(target);
 
     all_targets.erase(all_targets.begin() + i);
 }
 
 void placeBorder(Board& i_board, int i_x, int i_y, Border i_border) {
-    i_board.getCells()[indexOfCell(i_board, i_x, i_y)].setBorder(i_border);
+    i_board.getCells()[i_x][i_y].setBorder(i_border);
 }
 
-int indexOfCell(Board* i_board, int x, int y) {
-    for (int i = 0; i < i_board->getCells().size(); ++i) {
-        if (i_board->getCells()[i].getX() == x && i_board->getCells()[i].getY() == y) {
-            return i;
-        }
-    }
-    return -1;
-}
 //---------------------------------------------------------------------------------//
 
 //------------------------------PLATEAU------------------------------------//
@@ -62,13 +54,13 @@ void Board::initializeCells() {
 
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    Color color = static_cast<Color>(i);
+                    RColor color = static_cast<RColor>(i);
                     Shape shape = static_cast<Shape>(j);
                     Target target(shape, color);
                     cell_current.setTarget(target);
                 }
             }
-            cells.push_back(cell_current);
+            cells[x][y] = cell_current;
         }
     }
 }
@@ -100,8 +92,8 @@ void Board::placeAngles(Board& i_board) {
 
                     // Vérifie si la cell un coin / est déjà occupée
                     while ((x == 0 && y == 0) 
-                            || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()
-                            || i_board.getCells()[indexOfCell(i_board, x, y)].getBorder() != Border::NONE) {
+                            || i_board.getCells()[x][y].hasTarget()
+                            || i_board.getCells()[x][y].getBorder() != Border::NONE) {
 
                             randomizeAnglesPosition(0, 7, x);
                             randomizeAnglesPosition(0, 7, y);
@@ -122,8 +114,8 @@ void Board::placeAngles(Board& i_board) {
 
                     // Vérifie si la case un coin / est déjà occupée
                     while ((x == 15 && y == 0) 
-                            || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()
-                            || i_board.getCells()[indexOfCell(i_board, x, y)].getBorder() != Border::NONE) {
+                            || i_board.getCells()[x][y].hasTarget()
+                            || i_board.getCells()[x][y].getBorder() != Border::NONE) {
 
                         randomizeAnglesPosition(8, 15, x);
                         randomizeAnglesPosition(0, 7, y);
@@ -144,8 +136,8 @@ void Board::placeAngles(Board& i_board) {
 
                     // Vérifie si la case un coin / est déjà occupée
                     while ((x == 0 && y == 15) 
-                        || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()
-                        || i_board.getCells()[indexOfCell(i_board, x, y)].getBorder() != Border::NONE) {
+                        || i_board.getCells()[x][y].hasTarget()
+                        || i_board.getCells()[x][y].getBorder() != Border::NONE) {
 
                         randomizeAnglesPosition(0, 7, x);
                         randomizeAnglesPosition(8, 15, y);
@@ -166,8 +158,8 @@ void Board::placeAngles(Board& i_board) {
 
                     // Vérifie si la case un coin / est déjà occupée
                     while ( (x == 15 && y == 15) 
-                        || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()
-                        || i_board.getCells()[indexOfCell(i_board, x, y)].getBorder() != Border::NONE) {
+                        || i_board.getCells()[x][y].hasTarget()
+                        || i_board.getCells()[x][y].getBorder() != Border::NONE) {
                         randomizeAnglesPosition(8, 15, x);
                         randomizeAnglesPosition(8, 15, y);
                     }
@@ -184,12 +176,12 @@ void Board::placeAngles(Board& i_board) {
     }
     randomizeAnglesPosition(0, 15, x);
     randomizeAnglesPosition(0, 15, y);
-    while ((x == 0 && y == 0) || (x == 15 && y == 15) || i_board.getCells()[indexOfCell(i_board, x, y)].hasTarget()) {
+    while ((x == 0 && y == 0) || (x == 15 && y == 15) || i_board.getCells()[x][y].hasTarget()) {
         randomizeAnglesPosition(0, 15, x);
         randomizeAnglesPosition(0, 15, y);
     }
     placeBorder(i_board, x, y, static_cast<Border>(rand() % 4 + 1));
-    i_board.getCells()[indexOfCell(i_board, x, y)].setTarget(Target(Shape::CROSS, Color::MULTICOLOR));
+    i_board.getCells()[x][y].setTarget(Target(Shape::CROSS, RColor::MULTICOLOR));
 }
 
 /***
@@ -206,14 +198,13 @@ void Board::initializeRobots(Board& i_board) {
 
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            Color color = static_cast<Color>(i);
-            Robot robot(color);
+            RColor color = static_cast<RColor>(i);
+            Robot robot(color, &cells[0][0]); //Position initiale du Robot
 
-            while (i_board.getCells()[indexOfCell(i_board, x, y)].hasRobot()) {
+            while (i_board.getCells()[x][y].hasRobot()) {
                 randomizeAnglesPosition(0, 15, x);
                 randomizeAnglesPosition(0, 15, y);
             }
-            robot.setPosition(0, 0); // Position initiale du robot
             robots.push_back(robot);
         }
     }

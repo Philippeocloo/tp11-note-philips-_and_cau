@@ -35,11 +35,10 @@ bool Robot::checkifobstacle(Direction dir, Board* i_board){
         case Direction::RIGHT: X++; break;
         default: return true;
     }
-    int index = indexOfCell(i_board, X, Y);
-    if(index < 0 ){
+    if( X<0 || Y<0 || X >= TAILLE_X || Y >= TAILLE_Y ){
         return true;
     }
-    Cell target_cell = i_board->getCells()[index]; 
+    Cell target_cell = i_board->getCells()[X][Y]; 
     if(target_cell.hasRobot() || target_cell.hasTarget() ){
          return true;
     }
@@ -61,18 +60,15 @@ void Robot::move(Direction i_direction, Board* i_board){
             case Direction::RIGHT: x++; break;
             default: break;
         }
-
-        int index_cell = indexOfCell(i_board, x, y);
-        if (index_cell >= 0) {
-            setCell(i_board->getCells()[index_cell]);
-        } else {
-            break; 
+        if( x<0 || y<0 || x >= TAILLE_X || y >= TAILLE_Y ){
+            break;
         }
+        setCell(&i_board->getCells()[x][y]);
     }
 }
 
 bool Robot::onTarget(Target i_target) {
-    Target currentTarget = m_cell.getTarget();
+    Target currentTarget = m_cell->getTarget();
 
     if (currentTarget == i_target && m_color == i_target.getColor()) {
         return true;

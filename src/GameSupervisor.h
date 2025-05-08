@@ -16,8 +16,8 @@ class GameSupervisor{
 private : 
     Board m_board ;
     std::vector<Player> m_players;
-    std::map<Player , int> m_announced_moves;
-    std::map<Player , int> m_real_movements_counter;
+    std::map<Player* , int> m_announced_moves;
+    std::map<Player* , int> m_real_movements_counter;
     Target m_current_target; 
     std::vector<Target> m_targets_list;
 
@@ -28,22 +28,18 @@ public:
 
     void newTour();
 
-    void announceNb(Player i_player,int i_number);
+    void announceNb(Player* i_player,const int& i_number);
 
     void announceAllNb();
 
     void givePoint(Player & i_player);
 
-    std::vector<Player> sortPlayers();
+    std::vector<Player*> sortPlayers();
 
     // Setters
     void  setBoard(const Board& i_board);
 
     void  setPlayers(const std::vector<Player>& i_player);
-
-    void  setCoupsAnnonces(const std::map<Player, int>& i_announced_moves);
-
-    void  setCompteursCoupsReels(const std::map<Player, int>& i_real_movements_counter);
 
     void  setTargetCourante(const Target& i_current_target);
 
@@ -54,9 +50,9 @@ public:
 
     std::vector<Player> getPlayers() const;
     
-    std::map<Player, int> getCoupsAnnonces() const;
+    std::map<Player*, int> getCoupsAnnonces() const;
     
-    std::map<Player, int> getCompteursCoupsReels() const;
+    std::map<Player*, int> getCompteursCoupsReels() const;
     
     Target getTargetCourante() const;
     
