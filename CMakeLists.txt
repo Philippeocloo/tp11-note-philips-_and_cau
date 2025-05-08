@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.25)
 project(game)            # this sets the project name
+
+option(BUILD_GUI "Builds the user interface (needs extra dependencies)" ON)
 
 ###############################################################################
 ## file globbing ##############################################################
@@ -17,7 +19,7 @@ file(GLOB_RECURSE sources_test tests/*.cpp)
 
 # The data is just added to the executable, because in some IDEs (QtCreator) 
 # files are invisible when they are not explicitly part of the project.
-add_executable(game ${sources} ${data})
+add_library(game ${sources} ${data})
 
 # Just for example add some compiler flags.
 target_compile_options(game PUBLIC -Wall)
@@ -57,3 +59,33 @@ if(GTEST_FOUND)
   )
   
 endif()
+
+if(BUILD_GUI)
+    # Adding Raylib
+    include(FetchContent)
+    set(FETCHCONTENT_QUIET FALSE)
+    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+    set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example games
+
+    FetchContent_Declare(
+        raylib
+        GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+
+    set_target_properties(game PROPERTIES ENABLE_EXPORTS on)
+
+    FetchContent_MakeAvailable(raylib)
+
+    file(GLOB_RECURSE ui_sources   ui/src/*.cpp ui/src/*.h)
+
+    project(gui)
+
+    file(COPY ui/res
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+    add_executable(gui ${ui_sources})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="/home/yazil/projects/tp11-note-philips-_and_cau/ui/res")
+    target_link_libraries(gui PRIVATE raylib  game)
+endif(BUILD_GUI)
