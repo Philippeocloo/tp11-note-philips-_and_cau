@@ -1,9 +1,8 @@
 #include "GameSupervisor.h"
 
 
-GameSupervisor::GameSupervisor(std::vector<Player> i_players,Board i_board ){
+GameSupervisor::GameSupervisor(Board i_board ){
     // initialiser les membres et prendre en paramètre des noms de joueurs
-    this->m_players = i_players;
     this->m_board = i_board;    
 }
 
@@ -12,14 +11,66 @@ void GameSupervisor::announceNb(Player* i_player,const int& i_number){
     i_player->setBuzzer(false);
 }
 
-void GameSupervisor::announceAllNb(){
-// do all process in first 60 secs
-//à faire avec Yanis (dépendant de la partie graphique)
+void GameSupervisor::initPlayers(string i_players_names){
+    // initialiser les joueurs avec les noms donnés
+    std::vector<Player> players;
+    for (char name : i_players_names) {
+        players.push_back(Player(name));
+    }
+    this->m_players = players;
 }
 
-void GameSupervisor::newTour(){
 
-    announceAllNb(); // premieres 60 sec
+void GameSupervisor::changeState(enum State i_actual_state){
+    m_actual_state = i_actual_state;
+    
+    switch (m_actual_state) {
+        
+        case INIT_PLAYERS:
+            std::cout << "Initialisation des joueurs" << std::endl;
+            break;
+
+        case START_GAME:
+            std::cout << "Début du jeu" << std::endl;
+            break;
+
+        case START_TOUR:
+            std::cout << "Début du tour" << std::endl;
+            break;
+
+        case WAIT_60SEC:
+            std::cout << "Attente de 60 secondes" << std::endl;
+            break;
+
+        case PLAYER_PROPOSAL:
+            std::cout << "Proposition du joueur" << std::endl;
+            break;
+
+        case END_60SEC:
+            std::cout << "Fin des 60 secondes" << std::endl;
+            break;
+
+        case PLAYERS_TRIALS:
+            std::cout << "Essais des joueurs" << std::endl;
+            playersTrials(); // appel de la fonction newTour
+            break;
+
+        case END_TOUR:
+            std::cout << "Fin du tour" << std::endl;
+            break;
+
+        case END_GAME:
+            std::cout << "Fin du jeu" << std::endl;
+            break;
+
+        default:
+            std::cout << "État inconnu" << std::endl;
+            break;  
+    }
+}
+
+
+void GameSupervisor::playersTrials(){
 
     std::vector<Player*> sorted_players = sortPlayers();
 
@@ -48,7 +99,7 @@ std::vector<Player*> GameSupervisor::sortPlayers() { // trier les joueurs en fon
 
     // Trier par valeur 
     std::sort(vec.begin(), vec.end(),
-        [](const auto& a, const auto& b) { // fonction lambda pour comparer les nombres (élément 2 chaque paire)
+        [](const auto& a, const auto& b) { // fonction lambda pour comparer les nombres (élément 2 de chaque paire)
             return a.second < b.second;
         });
 
@@ -64,6 +115,11 @@ std::vector<Player*> GameSupervisor::sortPlayers() { // trier les joueurs en fon
 }
 
 // Setters
+
+void GameSupervisor::setActualState(const enum State& i_actual_state){
+    this-> m_actual_state = i_actual_state;
+}
+
 void  GameSupervisor::setBoard(const Board& i_board) { 
     this-> m_board = i_board; 
 }
@@ -81,6 +137,10 @@ void  GameSupervisor::setListesTargets(const std::vector<Target>& i_targets_list
 }
 
 // Getters
+enum State getActualState() const {
+    return this-> m_actual_state;
+}
+
 Board GameSupervisor::getBoard() const { 
     return this-> m_board; 
 }
@@ -104,3 +164,4 @@ Target GameSupervisor::getTargetCourante() const {
 std::vector<Target> GameSupervisor::getListesTargets() const { 
     return this-> m_targets_list; 
 }
+
