@@ -13,7 +13,7 @@ void RobotRenderer::render()
     {
         Robot current = (*m_robots)[i];
         Cell* currentCell = current.getCell();
-        Vector3 cellPosition = (Vector3){ (float)currentCell->getX() + 7.5f, 0.5f, (float)currentCell->getY() - 7.5f};
+        Vector3 cellPosition = (Vector3){ (float)(-currentCell->getX()) + 7.5f, 0.0f, (float)(currentCell->getY()) - 7.5f};
 
         DrawModel(robotModel, cellPosition, 1.0f, getColorFromRColor(current.getColor()));
     }
