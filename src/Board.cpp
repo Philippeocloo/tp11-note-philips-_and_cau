@@ -14,6 +14,38 @@ enum Quarter {
 };
 
 //-------------------------------TOOLS FUNCTIONS----------------------------------//
+
+/** 
+    * @brief Teste si la case est contiguë à une bordure ou à un mur du plateau
+    * @details La fonction vérifie si la case est sur le bord du plateau ou si elle est contiguë à une bordure.
+    * @param i_x Coordonnée x de la case
+    * @param i_y Coordonnée y de la case
+    * @param i_board Pointeur vers le plateau
+    * @return true Si la case est contiguë à une bordure ou à un mur du plateau
+    * @return false Sinon
+    */
+bool testContiguousnessWithBorderOrBoardWall(int i_x, int i_y, Board* i_board) {
+    if (i_x == 0 || i_x == TAILLE_X-1 || i_y == 0 || i_y == TAILLE_Y-1) {
+        return true; // Si la case est sur le bord du plateau, elle ne peut pas être placée
+    }
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i_board->getCell(i_x+i, i_y+j).getBorder() != Border::NONE) {
+                return true; // Si la case voisine a une bordure, elle ne peut pas être placée
+            }
+        }
+    }
+    return false; // Si aucune case voisine n'a de bordure, elle peut être placée
+}
+
+/***
+ * @brief Randomise la position d'un angle
+ * @details La fonction génère un nombre aléatoire entre dist_min et dist_max pour la position d'un angle.
+ * @param dist_min La distance minimale
+ * @param dist_max La distance maximale
+ * @param new_index_on_axis La nouvelle position de l'angle sur l'axe
+ * @note Utilise std::random_device et std::uniform_int_distribution pour générer un nombre aléatoire
+ */
 void Board::randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_on_axis) {
     std::random_device rd;
     std::uniform_int_distribution<int> dist(dist_min, dist_max);
@@ -21,6 +53,14 @@ void Board::randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_o
     new_index_on_axis = dist(rd);
 }
 
+/***
+ * @brief Place une cible sur le plateau
+ * @details La fonction place une cible sur le plateau à la position (i_x, i_y) et l'enlève de la liste des cibles.
+ * @param i_board Pointeur vers le plateau
+ * @param i_x Coordonnée x de la case
+ * @param i_y Coordonnée y de la case
+ * @param all_targets Liste de toutes les cibles
+ */
 void placeTarget(Board* i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
     int i = rand() % all_targets.size();
     Target target = all_targets[i];
@@ -29,6 +69,14 @@ void placeTarget(Board* i_board, int i_x, int i_y, std::vector<Target>& all_targ
     all_targets.erase(all_targets.begin() + i);
 }
 
+/***
+ * @brief Place une bordure sur le plateau
+ * @details La fonction place une bordure sur le plateau à la position (i_x, i_y).
+ * @param i_board Pointeur vers le plateau
+ * @param i_x Coordonnée x de la case
+ * @param i_y Coordonnée y de la case
+ * @param i_border La bordure à placer
+ */
 void placeBorder(Board* i_board, int i_x, int i_y, Border i_border) {
     i_board->getCell(i_x,i_y).setBorder(i_border);
 }
@@ -36,10 +84,30 @@ void placeBorder(Board* i_board, int i_x, int i_y, Border i_border) {
 //---------------------------------------------------------------------------------//
 
 //------------------------------PLATEAU------------------------------------//
+
+/***
+ * @brief Constructeur du plateau
+ * @details Le constructeur initialise les joueurs, les robots et les cellules du plateau.
+ */
 Board::Board() {
     initializePlayers();
     initializeRobots();
     initializeCells();
+}
+
+/***
+ * @brief Constructeur de copie du plateau
+ * @details Le constructeur copie les cellules, les robots et les joueurs de l'autre plateau.
+ * @param other Le plateau à copier
+ */
+Board::Board(const Board& other) {
+    for (int y = 0; y < TAILLE_Y; ++y) {
+        for (int x = 0; x < TAILLE_X; ++x) {
+            cells[x][y] = other.cells[x][y];
+        }
+    }
+    robots = other.robots;
+    players = other.players;
 }
 
 /***
@@ -51,21 +119,17 @@ void Board::initializeCells() {
     for (int y = 0; y < TAILLE_Y; y++) {
         for (int x = 0; x < TAILLE_X; x++) {
             Cell cell_current(x, y);
-
-            //TODO: Faulty logic 
-            // for (int i = 0; i < 4; i++) {
-            //     for (int j = 0; j < 4; j++) {
-            //         RColor color = static_cast<RColor>(i);
-            //         Shape shape = static_cast<Shape>(j);
-            //         Target target(shape, color);
-            //         cell_current.setTarget(target);
-            //     }
-            // }
             cells[x][y] = cell_current;
+            cells[x][y].setBorder(Border::NONE);
         }
     }
 }
 
+/***
+ * @brief Place les angles sur le plateau
+ * @details La fonction place les angles sur le plateau par quartiers.
+ * @note Comme nous devons placer 17 symboles et 17 angles, chaque angle accueille un symbole 
+ */
 void Board::placeAngles() {
 
     // Etape 1 : Création d'une liste de tous les symboles possibles sauf multicouleur
@@ -93,6 +157,7 @@ void Board::placeAngles() {
 
                     // Vérifie si la cell un coin / est déjà occupée
                     while ((x == 0 && y == 0) 
+                            || testContiguousnessWithBorderOrBoardWall(x, y, this)
                             || this->getCell(x,y).hasTarget()
                             || this->getCell(x,y).getBorder() != Border::NONE) {
 
@@ -115,6 +180,7 @@ void Board::placeAngles() {
 
                     // Vérifie si la case un coin / est déjà occupée
                     while ((x == 15 && y == 0) 
+                            || testContiguousnessWithBorderOrBoardWall(x, y, this)
                             || this->getCell(x,y).hasTarget()
                             || this->getCell(x,y).getBorder() != Border::NONE) {
 
@@ -137,6 +203,7 @@ void Board::placeAngles() {
 
                     // Vérifie si la case un coin / est déjà occupée
                     while ((x == 0 && y == 15) 
+                        || testContiguousnessWithBorderOrBoardWall(x, y, this)
                         || this->getCell(x,y).hasTarget()
                         || this->getCell(x,y).getBorder() != Border::NONE) {
 
@@ -159,6 +226,7 @@ void Board::placeAngles() {
 
                     // Vérifie si la case un coin / est déjà occupée
                     while ( (x == 15 && y == 15) 
+                        || testContiguousnessWithBorderOrBoardWall(x, y, this)
                         || this->getCell(x,y).hasTarget()
                         || this->getCell(x,y).getBorder() != Border::NONE) {
                         randomizeAnglesPosition(8, 15, x);
@@ -177,7 +245,10 @@ void Board::placeAngles() {
     }
     randomizeAnglesPosition(0, 15, x);
     randomizeAnglesPosition(0, 15, y);
-    while ((x == 0 && y == 0) || (x == 15 && y == 15) || this->getCell(x,y).hasTarget()) {
+    while ((x == 0 && y == 0) 
+        || testContiguousnessWithBorderOrBoardWall(x, y, this)
+        || (x == 15 && y == 15) 
+        || this->getCell(x,y).hasTarget()) {
         randomizeAnglesPosition(0, 15, x);
         randomizeAnglesPosition(0, 15, y);
     }
@@ -198,18 +269,24 @@ void Board::initializeRobots() {
     int y = 0;
 
     for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            RColor color = static_cast<RColor>(i);
-            Robot robot(color, &cells[0][0]); //Position initiale du Robot
+        
+        RColor color = static_cast<RColor>(i);
+        Robot robot(color, &cells[0][0]); //Position initiale du Robot
 
-            while (cells[x][y].hasRobot()) {
-                randomizeAnglesPosition(0, 15, x);
-                randomizeAnglesPosition(0, 15, y);
-            }
-            robots.push_back(robot);
+        randomizeAnglesPosition(0, 15, x);
+        randomizeAnglesPosition(0, 15, y);
+
+        while (this->getCell(x,y).getBorder() != Border::NONE
+            || this->getCell(x,y).hasRobot()) {
+            randomizeAnglesPosition(0, 15, x);
+            randomizeAnglesPosition(0, 15, y);
         }
+        robot.setCell(&cells[x][y]);
+        this->getCell(x,y).setRobot(&robots[i]);
+        robots.push_back(robot);
     }
 }
+
 
 /***
  * @brief Initialise les players sur le i_board

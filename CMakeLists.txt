@@ -12,6 +12,8 @@ option(BUILD_GUI "Builds the user interface (needs extra dependencies)" ON)
 # `sources` and `data`.
 file(GLOB_RECURSE sources      src/*.cpp src/*.h)
 file(GLOB_RECURSE sources_test tests/*.cpp)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ###############################################################################
 ## target definitions #########################################################
