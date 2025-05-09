@@ -85,7 +85,7 @@ int main(void)
 
             BeginMode3D(camera);
 
-                //robotRenderer.render();
+                robotRenderer.render();
 
                 for (size_t x = 0; x < TAILLE_X; x++)
                 {
