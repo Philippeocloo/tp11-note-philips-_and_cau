@@ -37,13 +37,14 @@ public:
 // Setters
     void setBorder(Border i_border);
 
-    void setTarget(Target i_target) { 
+    void setTarget(Target i_target, bool m_hasTarget) { 
         m_target = i_target; 
-        m_hasTarget = true;
+        this->m_hasTarget = m_hasTarget;
     }
 
     void setRobot(Robot* i_robot) { 
         m_robot = i_robot; 
+
     }
 
 // Autres
