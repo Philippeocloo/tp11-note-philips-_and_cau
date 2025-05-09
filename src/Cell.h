@@ -18,13 +18,12 @@ private:
     Robot* m_robot;
     Target m_target;
 
-    bool m_hasRobot = false;
     bool m_hasTarget = false;
 
 public:
 
 // Constructeurs
-    Cell() : m_x(0), m_y(0), m_border(Border::NONE) {};
+    Cell() : m_x(0), m_y(0), m_border(Border::NONE), m_robot(nullptr) {};
     Cell(int x, int y);
 
 // Getters
