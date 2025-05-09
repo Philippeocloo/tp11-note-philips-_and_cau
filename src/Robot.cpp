@@ -38,7 +38,7 @@ bool Robot::checkifobstacle(Direction dir, Board* i_board){
     if( X<0 || Y<0 || X >= TAILLE_X || Y >= TAILLE_Y ){
         return true;
     }
-    Cell target_cell = i_board->getCells()[X][Y]; 
+    Cell& target_cell = i_board->getCell(X,Y); 
     if(target_cell.hasRobot() || target_cell.hasTarget() ){
          return true;
     }
@@ -63,7 +63,7 @@ void Robot::move(Direction i_direction, Board* i_board){
         if( x<0 || y<0 || x >= TAILLE_X || y >= TAILLE_Y ){
             break;
         }
-        setCell(&i_board->getCells()[x][y]);
+        setCell(&i_board->getCell(x,y));
     }
 }
 

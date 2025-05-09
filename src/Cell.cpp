@@ -3,6 +3,7 @@
 Cell::Cell(int i_x, int i_y) {
     this->m_x = i_x;
     this->m_y = i_y;
+    m_border = Border::NONE;
 }
 
 //Setters

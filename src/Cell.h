@@ -24,7 +24,7 @@ private:
 public:
 
 // Constructeurs
-    Cell() : m_x(0), m_y(0) {};
+    Cell() : m_x(0), m_y(0), m_border(Border::NONE) {};
     Cell(int x, int y);
 
 // Getters
