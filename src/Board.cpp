@@ -269,22 +269,24 @@ void Board::initializeRobots() {
     int y = 0;
 
     for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            RColor color = static_cast<RColor>(i);
-            Robot robot(color, &cells[0][0]); //Position initiale du Robot
+        
+        RColor color = static_cast<RColor>(i);
+        Robot robot(color, &cells[0][0]); //Position initiale du Robot
 
+        randomizeAnglesPosition(0, 15, x);
+        randomizeAnglesPosition(0, 15, y);
+
+        while (this->getCell(x,y).getBorder() != Border::NONE
+            || this->getCell(x,y).hasRobot()) {
             randomizeAnglesPosition(0, 15, x);
             randomizeAnglesPosition(0, 15, y);
-
-            while (this->getCell(x,y).getBorder() != Border::NONE) {
-                randomizeAnglesPosition(0, 15, x);
-                randomizeAnglesPosition(0, 15, y);
-            }
-            robot.setCell(&cells[x][y]);
-            robots.push_back(robot);
         }
+        robot.setCell(&cells[x][y]);
+        this->getCell(x,y).setRobot(&robots[i]);
+        robots.push_back(robot);
     }
 }
+
 
 /***
  * @brief Initialise les players sur le i_board
