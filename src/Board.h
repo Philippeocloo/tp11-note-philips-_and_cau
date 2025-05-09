@@ -17,6 +17,8 @@ class Board {
     public:
         Board();
 
+        Board(const Board& other);
+
         void initializeCells();
         void placeAngles();
         void initializeRobots();
