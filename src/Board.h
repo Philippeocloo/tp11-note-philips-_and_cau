@@ -18,13 +18,13 @@ class Board {
         Board();
 
         void initializeCells();
-        void placeAngles(Board& i_board);
-        void initializeRobots(Board& i_board);
+        void placeAngles();
+        void initializeRobots();
         void initializePlayers();
         void printBoard() const;
 
-        Cell** getCells() { return (Cell**)cells; };
-        const std::vector<Robot>& getRobots() const { return robots; }; // Ajout de const
+        Cell& getCell(int x, int y) { return cells[x][y]; };
+        const std::vector<Robot>* getRobots() const { return &robots; }; // Ajout de const
         const std::vector<Player>& getPlayers() const { return players; }; // Ajout de const
 
         void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);

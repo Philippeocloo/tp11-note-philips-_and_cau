@@ -1,15 +1,10 @@
+#include <Board.h>
 #include <Cell.h>
 #include <raylib.h>
 
-#undef RED
-#undef GREEN
-#undef BLUE
-#undef YELLOW
+#include "ColorConverter.h"
 
-#define R_RED (Color){ 230, 41, 55, 255 } 
-#define R_GREEN (Color){ 0, 228, 48, 255 } 
-#define R_YELLOW (Color){ 253, 249, 0, 255 }
-#define R_BLUE (Color){ 0, 121, 241, 255 }
+#include "RobotRenderer.h"
 
 void RenderCell(Cell& currentCell);
 
@@ -29,27 +24,28 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1600;
     const int screenHeight = 900;
-
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(screenWidth, screenHeight, "Bouncing Robots");
 
     // Define the camera to look into our 3d world
     Camera camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 20.0f, -15.0f }; // Camera position
+    camera.position = (Vector3){ 0.0f, 25.0f, -15.0f }; // Camera position
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
-    Vector3 cubePosition = { 0.0f, 1.0f, 0.0f };
-    Vector3 cubeSize = { 2.0f, 2.0f, 2.0f };
-
     Ray ray = { 0 };                    // Picking line ray
     RayCollision collision = { 0 };     // Ray collision hit info
 
-    Cell test = Cell(0, 0);
-    test.setBorder(Border::SW);
-    test.setTarget(Target(Shape::CROSS, RColor::MULTICOLOR));
+    // GAME INIT STUFF
 
+    Cell test = Cell(1, 1);
+    test.setBorder(Border::SW);
+
+    Board board = Board();
+    board.placeAngles();
+    RobotRenderer robotRenderer = RobotRenderer(board.getRobots());
 
     //Load models
     crossModel = LoadModel("res/cross.obj");
@@ -63,14 +59,6 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        if (IsCursorHidden()) UpdateCamera(&camera, CAMERA_FIRST_PERSON);
-
-        // Toggle camera controls
-        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
-        {
-            if (IsCursorHidden()) EnableCursor();
-            else DisableCursor();
-        }
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
@@ -78,10 +66,12 @@ int main(void)
             {
                 ray = GetScreenToWorldRay(GetMousePosition(), camera);
 
-                // Check collision between ray and box
-                collision = GetRayCollisionBox(ray,
-                            (BoundingBox){(Vector3){ cubePosition.x - cubeSize.x/2, cubePosition.y - cubeSize.y/2, cubePosition.z - cubeSize.z/2 },
-                                          (Vector3){ cubePosition.x + cubeSize.x/2, cubePosition.y + cubeSize.y/2, cubePosition.z + cubeSize.z/2 }});
+                // // Check collision between ray and box
+                // collision = GetRayCollisionBox(ray,
+                //             (BoundingBox){(Vector3){ cubePosition.x - cubeSize.x/2, cubePosition.y - cubeSize.y/2, cubePosition.z - cubeSize.z/2 },
+                //                           (Vector3){ cubePosition.x + cubeSize.x/2, cubePosition.y + cubeSize.y/2, cubePosition.z + cubeSize.z/2 }});
+
+                //TODO: CHECK COLISIONS WITH ROBOTS
             }
             else collision.hit = false;
         }
@@ -95,7 +85,17 @@ int main(void)
 
             BeginMode3D(camera);
 
-                RenderCell(test);
+                //robotRenderer.render();
+
+                for (size_t x = 0; x < TAILLE_X; x++)
+                {
+                    for (size_t y = 0; y < TAILLE_Y; y++)
+                    {
+                        RenderCell(board.getCell(x, y));
+                    }
+                    
+                }
+
                 DrawGrid(16, 1.0f);
 
             EndMode3D();
@@ -119,7 +119,7 @@ int main(void)
 /// @details Renders the borders and target of a Cell at the correct coordinates (should only be called in 3d mode)
 /// @param currentCell The cell that will be drawn
 void RenderCell(Cell& currentCell) {
-    Vector3 cellPosition = (Vector3){ (float)currentCell.getX() + 7.5f, 0.5f, (float)currentCell.getY() - 7.5f};
+    Vector3 cellPosition = (Vector3){ (float)(-currentCell.getX()) + 7.5f, 0.5f, (float)(currentCell.getY()) - 7.5f};
 
     //render the border
     switch (currentCell.getBorder())
@@ -147,19 +147,19 @@ void RenderCell(Cell& currentCell) {
     //render the target
     if(currentCell.hasTarget()) {
         Target target = currentCell.getTarget();
-
+        Color drawColor = getColorFromRColor(target.getColor());
         switch(target.getShape()) {
             case Shape::CROSS:
-                DrawModel(crossModel, cellPosition, 1.0f, R_RED);
+                DrawModel(crossModel, cellPosition, 1.0f, drawColor);
                 break;
             case Shape::CIRCLE:
-                DrawCylinder(cellPosition, 1.0f, 1.0f, 0.1f, 8, R_RED);
+                DrawCylinder(cellPosition, 0.5f, 0.5f, 0.1f, 8, drawColor);
                 break;
             case Shape::SQUARE:
-                DrawCube(cellPosition, 1.0f, 0.1f, 1.0f, R_RED);
+                DrawCube(cellPosition, 0.9f, 0.1f, 0.9f, drawColor);
                 break;
             case Shape::TRIANGLE:
-                DrawModel(triModel, cellPosition, 1.0f, R_RED);
+                DrawModel(triModel, cellPosition, 1.0f, drawColor);
                 break;
         }
     }
