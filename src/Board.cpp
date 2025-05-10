@@ -60,14 +60,14 @@ void Board::randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_o
  * @param i_board Pointeur vers le plateau
  * @param i_x Coordonnée x de la case
  * @param i_y Coordonnée y de la case
- * @param all_targets Liste de toutes les cibles
+ * @param m_allTargets Liste de toutes les cibles
  */
-void placeTarget(Board* i_board, int i_x, int i_y, std::vector<Target>& all_targets) {
-    int i = rand() % all_targets.size();
-    Target target = all_targets[i];
-    i_board->getCell(i_x,i_y).setTarget(target);
+void placeTarget(Board* i_board, int i_x, int i_y, std::vector<Target>& m_allTargets) {
+    int i = rand() % m_allTargets.size();
+    Target target = m_allTargets[i];
+    i_board->getCell(i_x,i_y).setTarget(target, true);
 
-    all_targets.erase(all_targets.begin() + i);
+    m_allTargets.erase(m_allTargets.begin() + i);
 }
 
 /***
@@ -88,16 +88,16 @@ void placeBorder(Board* i_board, int i_x, int i_y, Border i_border) {
 
 /***
  * @brief Constructeur du plateau
- * @details Le constructeur initialise les joueurs, les robots et les cellules du plateau.
+ * @details Le constructeur initialise les joueurs, les m_robots et les cellules du plateau.
  */
 Board::Board() {
-    initializeRobots();
     initializeCells();
+    initializeRobots();
 }
 
 /***
  * @brief Constructeur de copie du plateau
- * @details Le constructeur copie les cellules, les robots et les joueurs de l'autre plateau.
+ * @details Le constructeur copie les cellules, les m_robots et les joueurs de l'autre plateau.
  * @param other Le plateau à copier
  */
 Board::Board(const Board& other) {
@@ -106,7 +106,8 @@ Board::Board(const Board& other) {
             cells[x][y] = other.cells[x][y];
         }
     }
-    robots = other.robots;
+    m_robots = other.m_robots;
+    m_allTargets = other.m_allTargets;
 }
 
 /***
@@ -132,10 +133,9 @@ void Board::initializeCells() {
 void Board::placeAngles() {
 
     // Etape 1 : Création d'une liste de tous les symboles possibles sauf multicouleur
-    std::vector<Target> all_targets; 
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            all_targets.push_back(Target(static_cast<Shape>(i), static_cast<RColor>(j)));
+            m_allTargets.push_back(Target(static_cast<Shape>(i), static_cast<RColor>(j)));
         }
     }
     
@@ -143,7 +143,7 @@ void Board::placeAngles() {
     int x = 0;
     int y = 0;
 
-    while (!all_targets.empty()) {
+    while (!m_allTargets.empty()) {
 
         switch (quarter_of_board) {
             case Quarter::DOWN_LEFT : 
@@ -164,7 +164,7 @@ void Board::placeAngles() {
                             randomizeAnglesPosition(0, 7, y);
                     }
                     placeBorder(this, x, y, static_cast<Border>(i+1));
-                    placeTarget(this, x, y, all_targets);
+                    placeTarget(this, x, y, m_allTargets);
                 }
                 quarter_of_board = Quarter::DOWN_RIGHT; // On passe au quarter suivant
                 break;
@@ -187,7 +187,7 @@ void Board::placeAngles() {
                         randomizeAnglesPosition(0, 7, y);
                     }
                     placeBorder(this, x, y, static_cast<Border>(i+1));
-                    placeTarget(this, x, y, all_targets);
+                    placeTarget(this, x, y, m_allTargets);
                 }
                 quarter_of_board = Quarter::UP_LEFT;
                 break;
@@ -210,7 +210,7 @@ void Board::placeAngles() {
                         randomizeAnglesPosition(8, 15, y);
                     }  
                     placeBorder(this, x, y, static_cast<Border>(i+1));
-                    placeTarget(this, x, y, all_targets);
+                    placeTarget(this, x, y, m_allTargets);
                 }  
                 quarter_of_board = Quarter::UP_RIGHT;
                 break;
@@ -232,7 +232,7 @@ void Board::placeAngles() {
                         randomizeAnglesPosition(8, 15, y);
                     }
                     placeBorder(this, x, y, static_cast<Border>(i+1));
-                    placeTarget(this, x, y, all_targets);
+                    placeTarget(this, x, y, m_allTargets);
                 }
                 break;
             
@@ -252,15 +252,15 @@ void Board::placeAngles() {
         randomizeAnglesPosition(0, 15, y);
     }
     placeBorder(this, x, y, static_cast<Border>(rand() % 4 + 1));
-    this->getCell(x,y).setTarget(Target(Shape::CROSS, RColor::MULTICOLOR));
+    this->getCell(x,y).setTarget(Target(Shape::CROSS, RColor::MULTICOLOR), true);
 }
 
 /***
- * @brief Initialise les robots sur le i_board
- * @details Les robots sont initialisés avec des couleurs et des formes différentes.
+ * @brief Initialise les m_robots sur le i_board
+ * @details Les m_robots sont initialisés avec des couleurs et des formes différentes.
  *          Les couleurs sont : RED, BLUE, YELLOW, GREEN
  *          Les formes sont : CROSS, CIRCLE, SQUARE
- * @note Les robots sont ajoutés à la liste des robots du this->
+ * @note Les m_robots sont ajoutés à la liste des m_robots du this->
  */
 void Board::initializeRobots() {
 
@@ -270,22 +270,21 @@ void Board::initializeRobots() {
     for (int i = 0; i < 4; ++i) {
         
         RColor color = static_cast<RColor>(i);
-        Robot robot(color, &cells[0][0]); //Position initiale du Robot
-
+        Robot robot(color, &cells[0][0]); // position temporaire
         randomizeAnglesPosition(0, 15, x);
         randomizeAnglesPosition(0, 15, y);
-
+        
+        // Choisir une case valide
         while (this->getCell(x,y).getBorder() != Border::NONE
             || this->getCell(x,y).hasRobot()) {
             randomizeAnglesPosition(0, 15, x);
             randomizeAnglesPosition(0, 15, y);
         }
-        robot.setCell(&cells[x][y]);
-        this->getCell(x,y).setRobot(&robots[i]);
-        robots.push_back(robot);
-    }
-}
 
+        m_robots.push_back(robot); //On met le robot dans le vecteur
+        
+        m_robots.back().setCell(&cells[x][y]); 
+        this->getCell(x,y).setRobot(&m_robots.back()); //On met le robot dans la case  
 
 void Board::printBoard() const {
     std::cout << "Board (" << TAILLE_X << " x " << TAILLE_Y << ")" << std::endl;

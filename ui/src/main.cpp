@@ -25,7 +25,8 @@ int main(void)
     const int screenWidth = 1600;
     const int screenHeight = 900;
     SetConfigFlags(FLAG_MSAA_4X_HINT|FLAG_WINDOW_HIGHDPI);
-    InitWindow(screenWidth, screenHeight, "Il n'y a d'égal à l'ego de Quentin que son incompétence");
+
+    InitWindow(screenWidth, screenHeight, "Robot's Game");
 
     // Define the camera to look into our 3d world
     Camera camera = { 0 };
