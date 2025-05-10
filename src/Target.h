@@ -13,6 +13,8 @@ public:
     Target();
     Target(Shape i_shape, RColor i_color);
 
+    ~Target() = default;
+
     Shape getShape() const;
     RColor getColor() const;
 
