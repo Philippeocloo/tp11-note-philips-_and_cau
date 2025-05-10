@@ -14,6 +14,7 @@ bool Player::getBuzzer() const { return m_buzzer; }
 int Player::getX() const { return m_x; }
 int Player::getY() const { return m_y; }
 int Player::getScore() const { return m_score; }
+Board* Player::getBoard() const {return m_board;}
 
 void Player::setPoints(int i_points) { m_points = i_points; }
 void Player::setBuzzer(bool i_buzzer) { m_buzzer = i_buzzer; }
