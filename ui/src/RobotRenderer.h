@@ -1,4 +1,6 @@
-#include <Robot.h>
+#include "Robot.h"
+#include "Cell.h"
+#include <vector>
 
 #include <raylib.h>
 #include "ColorConverter.h"

@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Cell.h"
+#include "Robot.h"
 #include "Target.h"
 #include <iostream>
 #include <random>
@@ -90,7 +91,6 @@ void placeBorder(Board* i_board, int i_x, int i_y, Border i_border) {
  * @details Le constructeur initialise les joueurs, les robots et les cellules du plateau.
  */
 Board::Board() {
-    initializePlayers();
     initializeRobots();
     initializeCells();
 }
@@ -107,7 +107,6 @@ Board::Board(const Board& other) {
         }
     }
     robots = other.robots;
-    players = other.players;
 }
 
 /***
@@ -287,18 +286,6 @@ void Board::initializeRobots() {
     }
 }
 
-
-/***
- * @brief Initialise les players sur le i_board
- * @details Les players sont initialisés avec des identifiants de 0 à 3.
- *          Les players sont ajoutés à la liste des players du this->
- */
-void Board::initializePlayers() {
-    for (int i = 0; i < 4; ++i) {
-        Player player(i);
-        players.push_back(player);
-    }
-}
 
 void Board::printBoard() const {
     std::cout << "Board (" << TAILLE_X << " x " << TAILLE_Y << ")" << std::endl;
