@@ -33,6 +33,7 @@ public:
     int getX() const;
     int getY() const;
     int getScore() const;
+    Board* getBoard() const;
 
     void setPoints(int points);
     void setBuzzer(bool droit);
