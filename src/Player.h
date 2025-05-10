@@ -4,10 +4,8 @@
 #include "Target.h"
 #include "enums/Direction.h"
 
-struct MoveResult {
-    Direction direction;
-    int robotIndex;
-};
+class Board;
+class Robot;
 
 class Board;
 
@@ -19,16 +17,14 @@ private:
     int m_x;
     int m_y;
     int m_score;
+    Board* m_board;
 
 public:
     Player(const char lettre);
-
-    //TODO: Je suis pas certain que ce soit le bon endroit pour ces fonctions (et elles empechent la compilation (interdépendance avec Board.h))
-    /*
-    MoveResult giveTry(Board* i_board, std::vector<Robot>& robots);
-    bool tryPlayer(int i_tries, Target i_target, Board* i_board, std::vector<Robot>& robots);
-    */
     
+    void giveTry(Board* i_board, Robot* robot, Direction dir);
+
+    bool tryPlayer(Target i_target, Robot* i_robot, Direction i_dir, Robot* i_selectedRobot);
 
     // Guetteurs
     char getLettre() const;
@@ -40,6 +36,7 @@ public:
 
     void setPoints(int points);
     void setBuzzer(bool droit);
+    void setTryBoard(Board* i_board);
     void setPosition(int x, int y);
     void setScore(int score);
 };
