@@ -11,7 +11,6 @@ class Board {
     private:
         Cell cells[TAILLE_X][TAILLE_Y];
         std::vector<Robot> m_robots;
-        std::vector<Player> m_players;
         std::vector<Target> m_allTargets;
         
     public:
