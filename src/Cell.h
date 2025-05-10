@@ -18,13 +18,12 @@ private:
     Robot* m_robot;
     Target m_target;
 
-    bool m_hasRobot = false;
     bool m_hasTarget = false;
 
 public:
 
 // Constructeurs
-    Cell() : m_x(0), m_y(0), m_border(Border::NONE) {};
+    Cell() : m_x(0), m_y(0), m_border(Border::NONE), m_robot(nullptr) {};
     Cell(int x, int y);
 
 // Getters
@@ -38,13 +37,14 @@ public:
 // Setters
     void setBorder(Border i_border);
 
-    void setTarget(Target i_target) { 
+    void setTarget(Target i_target, bool m_hasTarget) { 
         m_target = i_target; 
-        m_hasTarget = true;
+        this->m_hasTarget = m_hasTarget;
     }
 
     void setRobot(Robot* i_robot) { 
         m_robot = i_robot; 
+
     }
 
 // Autres
