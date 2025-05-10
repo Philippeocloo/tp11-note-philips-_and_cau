@@ -25,7 +25,7 @@ void GameSupervisor::initPlayers(std::string i_players_names){
 void GameSupervisor::changeState(enum State i_actual_state){
     m_actual_state = i_actual_state;
     
-    switch (m_actual_state) {
+    switch (i_actual_state) {
         
         case State::INIT_PLAYERS:
             std::cout << "Initialisation des joueurs" << std::endl;
@@ -81,17 +81,24 @@ void GameSupervisor::changeState(enum State i_actual_state){
             // - Passer à l'état MOVING_ROBOT
             break;
 
-        case State::MOVING_ROBOT:
+        case State::MOVING_ROBOT:{
             std::cout << "Déplacement du robot" << std::endl; 
-            bool on_target = m_sorted_players[0]->tryPlayer(m_current_target,findRobotByColor(m_board.getRobots(),m_current_target.getColor()), m_robot_direction.second, m_robot_direction.first); // essayer de déplacer le robot
-            m_real_movements_counter[m_sorted_players[0]]++; // incrémenter le compteur de coups réels
+            
+            //Mouvement du robot par le joueur
+            bool on_target = m_sorted_players[0]->tryPlayer(
+                m_current_target,
+                findRobotByColor(m_board.getRobots(),m_current_target.getColor()), 
+                m_robot_direction.second, 
+                m_robot_direction.first); 
+            
+                m_real_movements_counter[m_sorted_players[0]]++; // incrémenter le compteur de coups réels
 
             if (on_target) {
                 // Si le robot est sur la cible, donner un point au joueur
                 givePoint(*m_sorted_players[0]);
 
                 // Prendre le plateau du joueur et le mettre comme plateau de jeu
-                this->m_board = m_sorted_players[0]->getBoard(); // mettre à jour le plateau du joueur
+                this->m_board = *(m_sorted_players[0]->getBoard()); // mettre à jour le plateau du joueur
 
                 //detruire la board du joueur
                 delete m_sorted_players[0]->getBoard(); 
@@ -115,14 +122,15 @@ void GameSupervisor::changeState(enum State i_actual_state){
                 // - Demander au joueur de choisir un robot et une direction
                 // - Remplir la pair <robot, direction> avec les valeurs choisies
                 // - Passer à l'état MOVING_ROBOT
+                
             }
 
             // A faire dans l'interface graphique :
             // - Déplacer le robot sur la carte
 
             break;
-
-        case State::END_PLAYER_PROPOSAL:
+        }
+        case State::END_PLAYER_PROPOSAL:{
             std::cout << "Fin de la proposition du joueur - Essai raté" << std::endl;
             if (m_sorted_players.size() > 1) {
                 // Passer au joueur suivant
@@ -135,10 +143,11 @@ void GameSupervisor::changeState(enum State i_actual_state){
             // A faire dans l'interface graphique :
             // Rien
             break;
+        }
 
         case State::END_TOUR:
             std::cout << "Fin du tour" << std::endl;
-            // A faire dans l'interface graphique :
+            // A faire dans l'interface graphique:
             // - Afficher les scores des joueurs
             // - Passer à l'état Start_Tour pour le prochain tour
             // - Si tous les tours sont terminés, passer à l'état END_GAME
@@ -155,12 +164,13 @@ void GameSupervisor::changeState(enum State i_actual_state){
     }
 }
 
-Robot* GameSupervisor::findRobotByColor(const std::vector<Robot>& i_robots, const std::string& i_color) {
-    for (const auto& robot : ) {
+Robot* GameSupervisor::findRobotByColor(std::vector<Robot>* i_robots, const RColor& i_color) {
+    for (Robot& robot : *i_robots) {
         if (robot.getColor() == i_color) {
-            return &robot;
+            return &robot; // Retourner le robot trouvé
         }
     }
+    // Si aucun robot n'est trouvé, afficher un message d'erreur
     std::cout<< "Robot non trouvé" << std::endl;
     return nullptr; // Retourner nullptr si le robot n'est pas trouvé
 }
@@ -186,7 +196,7 @@ void GameSupervisor::sortPlayers() { // trier les joueurs en fonction de leur no
 
     // Extraire les joueurs dans un nouveau vecteur ordonné
     for (const auto& pair : vec) {
-        this->sorted_players.push_back(pair.first);
+        this->m_sorted_players.push_back(pair.first);
     }
 
 }

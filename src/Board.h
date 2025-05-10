@@ -27,7 +27,7 @@ class Board {
 
         std::vector<Target>& getAllTargets() { return m_allTargets; };
         Cell& getCell(int x, int y) { return cells[x][y]; };
-        const std::vector<Robot>* getRobots() const { return &m_robots; };
+        std::vector<Robot>* getRobots() { return &m_robots; };
 
         void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);
         

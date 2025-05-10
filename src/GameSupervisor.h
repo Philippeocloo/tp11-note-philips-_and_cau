@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <map>
-#include <pair>
+#include <utility>
 #include <algorithm>
 #include <string>
 #include <iostream>
@@ -41,7 +41,7 @@ public:
 
     void sortPlayers();
 
-    Robot* findRobotByColor(const std::vector<Robot>& i_robots, const std::string& i_color);
+    Robot* findRobotByColor(std::vector<Robot>* i_robots, const RColor& i_color);
 
 
     // Setters
