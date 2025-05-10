@@ -12,7 +12,7 @@ option(BUILD_GUI "Builds the user interface (needs extra dependencies)" ON)
 # `sources` and `data`.
 file(GLOB_RECURSE sources      src/*.cpp src/*.h)
 file(GLOB_RECURSE sources_test tests/*.cpp)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ###############################################################################
@@ -33,34 +33,30 @@ target_include_directories(game PUBLIC src/)
 ## testing ####################################################################
 ###############################################################################
 
-# This is for our testing framework,
-# we don't add REQUIRED because it's just for testing.
-# People who might want to build the project to use it should not be required
-# to install testing dependencies.
-find_package(GTest)
+include(FetchContent)
 
-if(GTEST_FOUND)
-  add_executable(unit_tests ${sources_test} ${sources})
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/52eb8108c5bdec04579160ae17225d66034bd723.zip
+)
 
-  # This define is added to prevent collision with the main.
-  # It might be better solved by not adding the source with the main to the
-  # testing target.
-  target_compile_definitions(unit_tests PUBLIC UNIT_TESTS)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-  # This allows us to use the executable as a link library, and inherit all 
-  # linker options and library dependencies from it, by simply adding it as dependency.
-  set_target_properties(game PROPERTIES ENABLE_EXPORTS on)
+FetchContent_MakeAvailable(googletest)
 
-  target_link_libraries(unit_tests PUBLIC
-    ${GTEST_BOTH_LIBRARIES}
-    game
-  )
+add_executable(unit_tests ${sources_test})
 
-  target_include_directories(unit_tests PUBLIC
-    ${GTEST_INCLUDE_DIRS} # doesn't do anything on linux
-  )
-  
-endif()
+target_compile_definitions(unit_tests PUBLIC UNIT_TESTS)
+
+target_link_libraries(unit_tests PUBLIC
+  GTest::gtest_main
+  game
+)
+
+include(GoogleTest)
+gtest_discover_tests(unit_tests)
+
 
 if(BUILD_GUI)
     # Adding Raylib
@@ -88,6 +84,5 @@ if(BUILD_GUI)
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
     add_executable(gui ${ui_sources})
-    target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="/home/yazil/projects/tp11-note-philips-_and_cau/ui/res")
     target_link_libraries(gui PRIVATE raylib  game)
 endif(BUILD_GUI)

@@ -3,7 +3,6 @@
 #include <vector>
 #include "Cell.h"
 #include "Robot.h"
-#include "Player.h"
 
 #define TAILLE_X 16
 #define TAILLE_Y 16

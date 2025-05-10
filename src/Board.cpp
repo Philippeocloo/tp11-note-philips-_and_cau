@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Cell.h"
+#include "Robot.h"
 #include "Target.h"
 #include <iostream>
 #include <random>
@@ -279,13 +280,11 @@ void Board::initializeRobots() {
             randomizeAnglesPosition(0, 15, x);
             randomizeAnglesPosition(0, 15, y);
         }
-        
+
         m_robots.push_back(robot); //On met le robot dans le vecteur
         
         m_robots.back().setCell(&cells[x][y]); 
         this->getCell(x,y).setRobot(&m_robots.back()); //On met le robot dans la case  
-    }
-}
 
 void Board::printBoard() const {
     std::cout << "Board (" << TAILLE_X << " x " << TAILLE_Y << ")" << std::endl;
