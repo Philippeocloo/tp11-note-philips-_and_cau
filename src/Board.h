@@ -18,6 +18,8 @@ class Board {
 
         Board(const Board& other);
 
+        ~Board() = default;
+
         void initializeCells();
         void placeAngles();
         void initializeRobots();
