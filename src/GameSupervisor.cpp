@@ -87,7 +87,7 @@ void GameSupervisor::changeState(enum State i_actual_state){
             //Mouvement du robot par le joueur
             bool on_target = m_sorted_players[0]->tryPlayer(
                 m_current_target,
-                findRobotByColor(m_board.getRobots(),m_current_target.getColor()), 
+                findRobotByColor(&m_board.getRobots(),m_current_target.getColor()), 
                 m_robot_direction.second, 
                 m_robot_direction.first); 
             

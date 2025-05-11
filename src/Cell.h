@@ -17,13 +17,12 @@ private:
     Border m_border;
     Robot* m_robot;
     Target m_target;
-
-    bool m_hasTarget = false;
+    bool m_hasTarget;
 
 public:
 
 // Constructeurs
-    Cell() : m_x(0), m_y(0), m_border(Border::NONE), m_robot(nullptr) {};
+    Cell() : m_x(0), m_y(0), m_border(Border::NONE), m_robot(nullptr), m_hasTarget(false) {};
     Cell(int x, int y);
 
 // Getters
@@ -32,24 +31,13 @@ public:
     Target getTarget() { return this->m_target; };
     Border getBorder() const { return this->m_border; }
 
-    
-
 // Setters
     void setBorder(Border i_border);
+    void setTarget(Target i_target, bool m_hasTarget);
+    void setRobot(Robot* i_robot);
 
-    void setTarget(Target i_target, bool m_hasTarget) { 
-        m_target = i_target; 
-        this->m_hasTarget = m_hasTarget;
-    }
-
-    void setRobot(Robot* i_robot) { 
-        m_robot = i_robot; 
-
-    }
-
-// Autres
+// Autres méthodes
     bool hasTarget() const { return m_hasTarget; }; 
-    
     bool hasRobot() const { return m_robot != nullptr; };
 
 };

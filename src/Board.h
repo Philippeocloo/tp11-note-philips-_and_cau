@@ -14,21 +14,23 @@ class Board {
         std::vector<Target> m_allTargets;
         
     public:
+
+// Constructeurs
         Board();
+        Board(const Board& other); // Constructeur de copie
 
-        Board(const Board& other);
-
+// Destructeur
         ~Board() = default;
 
+// Getters
+        std::vector<Target>&    getAllTargets() { return m_allTargets; };
+        Cell&                   getCell(int x, int y) { return cells[x][y]; };
+        std::vector<Robot>&     getRobots() { return m_robots; };
+
+// Autres méthodes
         void initializeCells();
         void placeAngles();
         void initializeRobots();
-        void printBoard() const;
-
-        std::vector<Target>& getAllTargets() { return m_allTargets; };
-        Cell& getCell(int x, int y) { return cells[x][y]; };
-        std::vector<Robot>* getRobots() { return &m_robots; };
-
         void randomizeAnglesPosition(int dist_min, int dist_max, int& nex_index_on_axis);
         
 };
