@@ -25,7 +25,7 @@ class Board {
 // Getters
         std::vector<Target>&    getAllTargets() { return m_allTargets; };
         Cell&                   getCell(int x, int y) { return cells[x][y]; };
-        std::vector<Robot>&     getRobots() { return m_robots; };
+        std::vector<Robot>*     getRobots() { return &m_robots; };
 
 // Autres méthodes
         void initializeCells();
