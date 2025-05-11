@@ -1,7 +1,11 @@
 #include "GameSupervisor.h"
 
+GameSupervisor::GameSupervisor()
+{
+}
 
-GameSupervisor::GameSupervisor(Board i_board ){
+void GameSupervisor::setBoard(Board i_board)
+{
     // initialiser les membres et prendre en paramètre des noms de joueurs
     this->m_board = i_board;    
     this->m_targets_list = i_board.getAllTargets(); // initialiser la liste des cibles
@@ -206,10 +210,6 @@ void GameSupervisor::setActualState(const enum State& i_actual_state){
     this-> m_actual_state = i_actual_state;
 }
 
-void  GameSupervisor::setBoard(const Board& i_board) { 
-    this-> m_board = i_board; 
-}
-
 void  GameSupervisor::setPlayers(const std::vector<Player>& i_player) { 
     this-> m_players = i_player; 
 }
@@ -243,8 +243,8 @@ enum State GameSupervisor::getActualState() {
     return this-> m_actual_state;
 }
 
-Board GameSupervisor::getBoard() const { 
-    return this-> m_board; 
+Board* GameSupervisor::getBoard() { 
+    return &this-> m_board; 
 }
 
 std::vector<Player> GameSupervisor::getPlayers() const { 

@@ -29,7 +29,8 @@ private :
 
 public:
 
-    GameSupervisor(Board i_board);
+    GameSupervisor();
+    void setBoard(Board i_board);
 
     void initPlayers(std::string i_players_names);
 
@@ -46,8 +47,6 @@ public:
 
     // Setters
     void  setActualState(const enum State& i_actual_state);
-
-    void  setBoard(const Board& i_board);
 
     void  setPlayers(const std::vector<Player>& i_player);
 
@@ -67,7 +66,7 @@ public:
 
     enum State getActualState();
 
-    Board getBoard() const;
+    Board* getBoard();
 
     std::vector<Player> getPlayers() const;
     

@@ -1,3 +1,4 @@
+#pragma once
 #include "Robot.h"
 #include "Cell.h"
 #include <vector>
@@ -12,7 +13,8 @@ private:
     const std::vector<Robot>* m_robots;
     Model robotModel;
 public:
-    RobotRenderer(const std::vector<Robot>* robot);
+    RobotRenderer();
+    void setRobots(const std::vector<Robot>* robots);
     bool checkSelection();
     void render();
 };

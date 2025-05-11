@@ -1,6 +1,6 @@
 #include "Target.h"
 
-Target::Target() : m_shape(Shape::CROSS), m_color(RColor::RED) {} // valeurs par défaut
+Target::Target() : m_shape(Shape::CROSS), m_color(RColor::R_RED) {} // valeurs par défaut
 
 Target::Target(Shape i_shape, RColor i_color): m_shape(i_shape), m_color(i_color) {}
 

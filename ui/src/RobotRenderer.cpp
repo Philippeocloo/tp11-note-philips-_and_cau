@@ -1,14 +1,20 @@
 #include "RobotRenderer.h"
 
-RobotRenderer::RobotRenderer(const std::vector<Robot>* robots)
+RobotRenderer::RobotRenderer()
 {
-    m_robots = robots;
+    m_robots = nullptr;
     robotModel = LoadModel("res/robot.glb");
     m_currentlySelected = nullptr;
 }
 
+void RobotRenderer::setRobots(const std::vector<Robot>* robots) 
+{
+    m_robots = robots;
+}
+
 void RobotRenderer::render()
 {
+    if(m_robots != nullptr) return;
     for (size_t i = 0; i < m_robots->size(); i++)
     {
         Robot current = (*m_robots)[i];

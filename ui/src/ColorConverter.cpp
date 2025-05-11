@@ -9,17 +9,17 @@ Color getColorFromRColor(RColor rcol) {
     Color drawColor;
     switch (rcol)
         {
-        case RColor::RED:
-            drawColor = R_RED;
+        case RColor::R_RED:
+            drawColor = RED;
             break;
-        case RColor::BLUE:
-            drawColor = R_BLUE;
+        case RColor::R_BLUE:
+            drawColor = BLUE;
             break;
-        case RColor::GREEN:
-            drawColor = R_GREEN;
+        case RColor::R_GREEN:
+            drawColor = GREEN;
             break;
-        case RColor::YELLOW:
-            drawColor = R_YELLOW;
+        case RColor::R_YELLOW:
+            drawColor = YELLOW;
             break;
         default:
             drawColor = BLACK;
