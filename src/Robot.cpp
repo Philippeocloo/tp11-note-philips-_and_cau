@@ -7,23 +7,18 @@
 #include "enums/Shape.h"
 #include <iostream>
 
-
+//--------------CONSTRUCTEUR------------------//
 Robot::Robot(RColor i_color, Cell* i_cell): m_color(i_color), m_cell(i_cell) {}
+//____________________________________________//
 
-
-Cell* Robot::getCell() {
-    return m_cell;
-}
-
-
-RColor Robot::getColor() const {
-    return m_color;
-}
-
+//--------------SETTERS-----------------------//
 void Robot::setCell(Cell* i_newCell) {
     m_cell = i_newCell;
 }
+//____________________________________________//
 
+
+//--------------AUTRES METHODES-----------------------//
 bool Robot::checkIfObstacle(Direction dir, Board* i_board) {
     if (!m_cell || !i_board) return true;
 
@@ -31,10 +26,22 @@ bool Robot::checkIfObstacle(Direction dir, Board* i_board) {
     int Y = m_cell->getY();
 
     switch (dir) {
-        case Direction::UP:    Y++; break;
-        case Direction::DOWN:  Y--; break;
-        case Direction::LEFT:  X--; break;
-        case Direction::RIGHT: X++; break;
+        case Direction::UP:    
+            Y++; 
+        break;
+        
+        case Direction::DOWN:  
+            Y--; 
+        break;
+
+        case Direction::LEFT:  
+            X--; 
+        break;
+
+        case Direction::RIGHT: 
+            X++; 
+        break;
+        
         default: return true;
     }
 
@@ -56,16 +63,20 @@ bool Robot::checkIfObstacle(Direction dir, Board* i_board) {
     switch (dir) {
         case Direction::UP:
             if (corner == Border::SE || corner == Border::SW) return true;
-            break;
+        break;
+
         case Direction::DOWN:
             if (corner == Border::NE || corner == Border::NW) return true;
-            break;
+        break;
+
         case Direction::LEFT:
             if (corner == Border::NE || corner == Border::SE) return true;
-            break;
+        break;
+
         case Direction::RIGHT:
             if (corner == Border::NW || corner == Border::SW) return true;
-            break;
+        break;
+        
         default:
             return true;
     }

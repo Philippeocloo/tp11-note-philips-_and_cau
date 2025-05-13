@@ -13,17 +13,19 @@ private:
     Cell* m_cell;
 
 public:
+
+//Constructeurs
     Robot(RColor i_couleur, Cell* i_cell);
+
+//Getters
+    Cell* getCell() const { return m_cell; };
+    RColor getColor() const {return m_color; };
+
+//Setters
+    void setCell(Cell* i_cell);
+
+// Autres méthodes
     bool checkIfObstacle(Direction dir, Board* i_board) ;
     bool onTarget(Target i_target);
     void move(Direction i_direction, Board* i_board);
-    
-
-    //Setteurs
-
-    void setCell(Cell* i_cell);
-
-    //Guetteurs
-    Cell* getCell();
-    RColor getColor() const;
 };
