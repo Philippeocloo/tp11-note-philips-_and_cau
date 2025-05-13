@@ -11,15 +11,15 @@
 
 
 struct SelectionInformation {
-    const Robot* selectedRobot;
+    Robot* selectedRobot;
     Direction dir;
 };
 
 
 class RobotRenderer{
 private:
-    const Robot* m_currentlySelected;
-    const std::vector<Robot>* m_robots;
+    Robot* m_currentlySelected;
+    std::vector<Robot>* m_robots;
     Model m_robotModel;
     Model m_arrowModel;
     BoundingBox m_robotBoundingBox;
@@ -31,7 +31,7 @@ private:
 public:
     RobotRenderer();
     void setCamera(Camera* camera);
-    void setRobots(const std::vector<Robot>* robots);
+    void setRobots(std::vector<Robot>* robots);
     SelectionInformation checkSelection();
     void render();
 };

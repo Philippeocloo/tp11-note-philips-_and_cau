@@ -71,14 +71,17 @@ void GameSupervisor::changeState(enum State i_actual_state){
         case State::START_PLAYER_PROPOSAL:
             std::cout << "Début de la proposition du joueur" << std::endl;
             m_real_movements_counter[m_sorted_players[0]] = 0; // initialiser le compteur de coups réels à 0
-            m_sorted_players[0]->setTryBoard(&m_board); // mettre à jour le plateau du joueur
+            m_sorted_players[0]->setTryBoard(new Board(m_board)); // mettre à jour le plateau du joueur
 
+            // A faire dans l'interface graphique :
+            // - Passer à l'état WAIT_FOR_MOVE
+            break;
+        case State::WAIT_FOR_MOVE:
             // A faire dans l'interface graphique :
             // - Demander au joueur 0 dans le vecteur de joueur trié de choisir un robot et une direction
             // - Remplir la pair <robot, direction> avec les valeurs choisies
             // - Passer à l'état MOVING_ROBOT
             break;
-
         case State::MOVING_ROBOT:{
             std::cout << "Déplacement du robot" << std::endl; 
             
@@ -110,17 +113,12 @@ void GameSupervisor::changeState(enum State i_actual_state){
             } 
             else if(m_real_movements_counter[m_sorted_players[0]] >= m_announced_moves[m_sorted_players[0]]) {
                 // Si le joueur a atteint le nombre de coups annoncés, passer à l'état END_PLAYER_PROPOSAL, il a raté son essai
-                this->m_sorted_players.erase(this->m_sorted_players.begin()); // enlever le joueur qui vient de jouer
                 // Passer à l'état END_PLAYER_PROPOSAL
                 changeState(State::END_PLAYER_PROPOSAL);
             } 
             else {
                 // Si le robot n'est pas sur la cible, passer à l'état START_PLAYER_PROPOSAL et redemander au joueur de choisir un robot et une direction
-                // A faire dans l'interface graphique :*
-                // - Demander au joueur de choisir un robot et une direction
-                // - Remplir la pair <robot, direction> avec les valeurs choisies
-                // - Passer à l'état MOVING_ROBOT
-                
+                changeState(State::WAIT_FOR_MOVE);
             }
 
             // A faire dans l'interface graphique :
@@ -132,6 +130,8 @@ void GameSupervisor::changeState(enum State i_actual_state){
             std::cout << "Fin de la proposition du joueur - Essai raté" << std::endl;
             if (m_sorted_players.size() > 1) {
                 // Passer au joueur suivant
+                delete (m_sorted_players[0]->getBoard());
+                m_sorted_players[0]->setTryBoard(nullptr);
                 m_sorted_players.erase(m_sorted_players.begin()); // enlever le joueur qui vient de jouer
                 changeState(State::START_PLAYER_PROPOSAL); // passer à l'état START_PLAYER_PROPOSAL pour le joueur suivant
             } else {
@@ -245,19 +245,19 @@ std::vector<Player>& GameSupervisor::getPlayers() {
     return this-> m_players; 
 }
 
-std::map<Player*, int> GameSupervisor::getAnnouncedMoves() const { 
+std::map<Player*, int>& GameSupervisor::getAnnouncedMoves() { 
     return this-> m_announced_moves; 
 }
 
-std::map<Player*, int> GameSupervisor::getRealMovementsCounter() const { 
+std::map<Player*, int>& GameSupervisor::getRealMovementsCounter() { 
     return this-> m_real_movements_counter; 
 }
 
-std::pair<Robot*, Direction> GameSupervisor::getRobotDirection() const { 
+std::pair<Robot*, Direction>& GameSupervisor::getRobotDirection() { 
     return this-> m_robot_direction; 
 }
 
-std::vector<Player*> GameSupervisor::getSortedPlayers() const { 
+std::vector<Player*>& GameSupervisor::getSortedPlayers() { 
     return this-> m_sorted_players; 
 }
 

@@ -17,7 +17,7 @@ void RobotRenderer::setCamera(Camera* camera) {
     m_camera = camera;
 }
 
-void RobotRenderer::setRobots(const std::vector<Robot>* robots) 
+void RobotRenderer::setRobots(std::vector<Robot>* robots) 
 {
     m_robots = robots;
 }
@@ -60,13 +60,12 @@ SelectionInformation RobotRenderer::checkSelection()
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        std::cout << "yo" << std::endl;
         m_ray = GetScreenToWorldRay(GetMousePosition(), *m_camera);
 
         // Check collision between ray and box
         for (size_t i = 0; i < m_robots->size(); i++)
         {
-            const Robot* current = &((*m_robots)[i]);
+            Robot* current = &((*m_robots)[i]);
             Cell* currentCell = current->getCell();
             Vector3 cellPosition = (Vector3){ (float)(-currentCell->getX()) + 7.5f, 0.0f, (float)(currentCell->getY()) - 7.5f};
 

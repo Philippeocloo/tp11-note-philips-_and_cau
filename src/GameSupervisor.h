@@ -71,13 +71,13 @@ public:
 
     std::vector<Player>& getPlayers();
     
-    std::map<Player*, int> getAnnouncedMoves() const;
+    std::map<Player*, int>& getAnnouncedMoves();
     
-    std::map<Player*, int> getRealMovementsCounter() const;
+    std::map<Player*, int>& getRealMovementsCounter();
 
-    std::pair<Robot*, Direction> getRobotDirection() const;
+    std::pair<Robot*, Direction>& getRobotDirection();
 
-    std::vector<Player*> getSortedPlayers() const;
+    std::vector<Player*>& getSortedPlayers();
     
     Target* getCurrentTarget() const;
     

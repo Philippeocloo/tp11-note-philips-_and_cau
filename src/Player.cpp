@@ -40,9 +40,18 @@ bool Player::tryPlayer(
     
     giveTry(m_board, i_selectedRobot, i_dir);
 
-    if (i_robot->onTarget(i_target)) {
-       std::cout << "Point !\n";
-       return true;
+    if(i_robot != nullptr) {
+        if (i_robot->onTarget(i_target)) {
+            std::cout << "Point !\n";
+            return true;
+        }
+    } else {
+        if (i_selectedRobot->onTarget(i_target)) {
+            std::cout << "Point !\n";
+            return true;
+        }
     }
+
+    
     return false;
 }

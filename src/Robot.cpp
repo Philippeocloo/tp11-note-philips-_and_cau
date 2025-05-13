@@ -25,6 +25,28 @@ bool Robot::checkIfObstacle(Direction dir, Board* i_board) {
     int X = m_cell->getX();
     int Y = m_cell->getY();
 
+    //Verifier case actuelle
+    Border currentBorder = m_cell->getBorder();
+
+    switch (dir) {
+        case Direction::UP:    
+            if(currentBorder == Border::NE || currentBorder == Border::NW) return true;
+        break;
+        
+        case Direction::DOWN:  
+            if(currentBorder == Border::SE || currentBorder == Border::SW) return true;
+        break;
+
+        case Direction::LEFT:  
+            if(currentBorder == Border::NW || currentBorder == Border::SW) return true;
+        break;
+
+        case Direction::RIGHT: 
+            if(currentBorder == Border::NE || currentBorder == Border::SE) return true;
+        break;
+        default: break;
+    }
+
     switch (dir) {
         case Direction::UP:    
             Y++; 
@@ -100,14 +122,16 @@ void Robot::move(Direction i_direction, Board* i_board){
         if( x<0 || y<0 || x >= TAILLE_X || y >= TAILLE_Y ){
             break;
         }
+        m_cell->setRobot(nullptr);
         setCell(&i_board->getCell(x,y));
+        i_board->getCell(x,y).setRobot(this);
     }
 }
 
 bool Robot::onTarget(Target* i_target) {
     Target* currentTarget = m_cell->getTarget();
 
-    if (currentTarget == i_target && m_color == i_target->getColor()) {
+    if (currentTarget == i_target && (m_color == i_target->getColor() || m_color == RColor::MULTICOLOR)) {
         return true;
     }   
     return false;

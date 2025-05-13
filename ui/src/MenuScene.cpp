@@ -13,7 +13,7 @@ void MenuScene::Update(float deltaTime)
     //Key pressed is A -> Z (https://en.wikipedia.org/wiki/List_of_Unicode_characters)
     if(key >= 97 && key <= 122 ) {
         int foundIndex = -1;
-        for (int i = 0; i < m_playerString.length(); i++)
+        for (unsigned int i = 0; i < m_playerString.length(); i++)
         {
             char currentChar = m_playerString[i];
 

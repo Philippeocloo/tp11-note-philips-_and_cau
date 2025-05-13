@@ -16,9 +16,20 @@ private:
     Model m_triModel;
 
     GameSupervisor m_supervisor;
+    Board* m_currentBoard = nullptr;
+
+    int m_playerBuzzing = -1;
+    std::string m_currentGuess;
+
+    float m_timer = 5.0f;
 
     void RenderCell(Cell& currentCell);
+
+    //Guessing related stuff
     int getPlayerBuzzing();
+    bool PollGuess();
+
+    void RenderCurrentTarget();
 
 public:
     GameScene(std::string players);

@@ -106,7 +106,12 @@ Board::Board(const Board& other) {
             cells[x][y] = other.cells[x][y];
         }
     }
-    m_robots = other.m_robots;
+    for(Robot robot : other.m_robots) {
+        int x = robot.getCell()->getX();
+        int y = robot.getCell()->getY();
+        robot.setCell(&cells[x][y]);
+        m_robots.push_back(robot);
+    }
     m_allTargets = other.m_allTargets;
 }
 
@@ -152,10 +157,7 @@ void Board::placeAngles() {
 
                 for (int i = 0; i < 4; i++) {
                     randomizeAnglesPosition(0, 7, x);
-                    randomizeAnglesPosition(0, 7, y);
-
-                    Cell c = getCell(x, y);
-                    
+                    randomizeAnglesPosition(0, 7, y);                    
 
                     // Vérifie si la cell un coin / est déjà occupée
                     while ((x == 0 && y == 0) 
