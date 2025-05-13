@@ -20,6 +20,11 @@
     ./gui
 ```
 
+5. Tester
+```bash
+    make unit_tests && ./unit_tests
+```
+
 # Troubleshooting
 
 Si ça ne compile pas, il est possible qu'il vous manque des dépendances:

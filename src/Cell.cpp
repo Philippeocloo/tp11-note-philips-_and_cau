@@ -11,3 +11,12 @@ Cell::Cell(int i_x, int i_y) {
 void Cell::setBorder(Border i_border) {
     this->m_border = i_border;
 }
+
+void Cell::setTarget(Target i_target, bool m_hasTarget){ 
+    m_target = i_target; 
+    this->m_hasTarget = m_hasTarget;
+}
+
+void Cell::setRobot(Robot* i_robot) { 
+    m_robot = i_robot; 
+}
