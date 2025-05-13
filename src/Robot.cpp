@@ -104,10 +104,10 @@ void Robot::move(Direction i_direction, Board* i_board){
     }
 }
 
-bool Robot::onTarget(Target i_target) {
-    Target currentTarget = m_cell->getTarget();
+bool Robot::onTarget(Target* i_target) {
+    Target* currentTarget = m_cell->getTarget();
 
-    if (currentTarget == i_target && m_color == i_target.getColor()) {
+    if (currentTarget == i_target && m_color == i_target->getColor()) {
         return true;
     }   
     return false;

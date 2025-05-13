@@ -31,6 +31,6 @@ public:
 
 // Autres méthodes
     void giveTry(Board* i_board, Robot* robot, Direction dir);
-    bool tryPlayer(Target i_target, Robot* i_robot, Direction i_dir, Robot* i_selectedRobot);
+    bool tryPlayer(Target* i_target, Robot* i_robot, Direction i_dir, Robot* i_selectedRobot);
 };
 

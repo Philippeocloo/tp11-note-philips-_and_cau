@@ -62,10 +62,10 @@ void Board::randomizeAnglesPosition(int dist_min, int dist_max, int& new_index_o
  * @param i_y Coordonnée y de la case
  * @param m_allTargets Liste de toutes les cibles
  */
-void placeTarget(Board* i_board, int i_x, int i_y, std::vector<Target>& m_allTargets) {
+void placeTarget(Board* i_board, int i_x, int i_y, std::vector<Target*>& m_allTargets) {
     int i = rand() % m_allTargets.size();
-    Target target = m_allTargets[i];
-    i_board->getCell(i_x,i_y).setTarget(target, true);
+    Target* target = m_allTargets[i];
+    i_board->getCell(i_x,i_y).setTarget(target);
 
     m_allTargets.erase(m_allTargets.begin() + i);
 }
@@ -135,7 +135,7 @@ void Board::placeAngles() {
     // Etape 1 : Création d'une liste de tous les symboles possibles sauf multicouleur
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            m_allTargets.push_back(Target(static_cast<Shape>(i), static_cast<RColor>(j)));
+            m_allTargets.push_back(new Target(static_cast<Shape>(i), static_cast<RColor>(j)));
         }
     }
     
@@ -153,6 +153,9 @@ void Board::placeAngles() {
                 for (int i = 0; i < 4; i++) {
                     randomizeAnglesPosition(0, 7, x);
                     randomizeAnglesPosition(0, 7, y);
+
+                    Cell c = getCell(x, y);
+                    
 
                     // Vérifie si la cell un coin / est déjà occupée
                     while ((x == 0 && y == 0) 
@@ -252,7 +255,9 @@ void Board::placeAngles() {
         randomizeAnglesPosition(0, 15, y);
     }
     placeBorder(this, x, y, static_cast<Border>(rand() % 4 + 1));
-    this->getCell(x,y).setTarget(Target(Shape::CROSS, RColor::MULTICOLOR), true);
+    Target* lastTarget = new Target(Shape::CROSS, RColor::MULTICOLOR);
+    this->getCell(x,y).setTarget(lastTarget);
+    m_allTargets.push_back(lastTarget);
 }
 
 /***

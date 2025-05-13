@@ -18,6 +18,7 @@ private:
     GameSupervisor m_supervisor;
 
     void RenderCell(Cell& currentCell);
+    int getPlayerBuzzing();
 
 public:
     GameScene(std::string players);

@@ -2,13 +2,8 @@
 
 GameSupervisor::GameSupervisor()
 {
-}
-
-void GameSupervisor::setBoard(Board i_board)
-{
-    // initialiser les membres et prendre en paramètre des noms de joueurs
-    this->m_board = i_board;    
-    this->m_targets_list = i_board.getAllTargets(); // initialiser la liste des cibles
+    m_board.placeAngles();
+    m_targets_list = m_board.getAllTargets();
 }
 
 void GameSupervisor::announceNb(Player* i_player,const int& i_number){
@@ -24,7 +19,6 @@ void GameSupervisor::initPlayers(std::string i_players_names){
     }
     this->m_players = players;
 }
-
 
 void GameSupervisor::changeState(enum State i_actual_state){
     m_actual_state = i_actual_state;
@@ -43,9 +37,9 @@ void GameSupervisor::changeState(enum State i_actual_state){
         case State::START_TOUR:
             std::cout << "Début du tour" << std::endl;
             // Choisir une cible aléatoire parmi la liste des cibles
-            if (!m_targets_list.empty()) {
-                int random_index = rand() % m_targets_list.size();
-                this->m_current_target = m_targets_list[random_index];
+            if (!m_targets_list->empty()) {
+                int random_index = rand() % m_targets_list->size();
+                this->m_current_target = (*m_targets_list)[random_index];
             } else {
                 std::cout << "Aucune cible disponible" << std::endl;
             }
@@ -91,7 +85,7 @@ void GameSupervisor::changeState(enum State i_actual_state){
             //Mouvement du robot par le joueur
             bool on_target = m_sorted_players[0]->tryPlayer(
                 m_current_target,
-                findRobotByColor(m_board.getRobots(),m_current_target.getColor()), 
+                findRobotByColor(m_board.getRobots(),m_current_target->getColor()), 
                 m_robot_direction.second, 
                 m_robot_direction.first); 
             
@@ -108,7 +102,7 @@ void GameSupervisor::changeState(enum State i_actual_state){
                 delete m_sorted_players[0]->getBoard(); 
 
                 //detruire la cible
-                m_targets_list.erase(std::remove(m_targets_list.begin(), m_targets_list.end(), m_current_target), m_targets_list.end()); // enlever la cible de la liste des cibles
+                m_targets_list->erase(std::remove(m_targets_list->begin(), m_targets_list->end(), m_current_target), m_targets_list->end()); // enlever la cible de la liste des cibles
 
                 // Passer à l'état END_TOUR 
                 changeState(State::END_TOUR);
@@ -214,11 +208,11 @@ void  GameSupervisor::setPlayers(const std::vector<Player>& i_player) {
     this-> m_players = i_player; 
 }
 
-void  GameSupervisor::setCurrentTarget(const Target& i_current_target) { 
+void  GameSupervisor::setCurrentTarget(Target* i_current_target) { 
     this-> m_current_target = i_current_target; 
 }
 
-void  GameSupervisor::setTargetsList(const std::vector<Target>& i_targets_list) { 
+void  GameSupervisor::setTargetsList(std::vector<Target*>* i_targets_list) { 
     this-> m_targets_list = i_targets_list; 
 }
 
@@ -247,7 +241,7 @@ Board* GameSupervisor::getBoard() {
     return &this-> m_board; 
 }
 
-std::vector<Player> GameSupervisor::getPlayers() const { 
+std::vector<Player>& GameSupervisor::getPlayers() { 
     return this-> m_players; 
 }
 
@@ -268,11 +262,11 @@ std::vector<Player*> GameSupervisor::getSortedPlayers() const {
 }
 
 
-Target GameSupervisor::getCurrentTarget() const { 
+Target* GameSupervisor::getCurrentTarget() const { 
     return this-> m_current_target; 
 }
 
-std::vector<Target> GameSupervisor::getTargetsList() const { 
-    return this-> m_targets_list; 
+std::vector<Target*>* GameSupervisor::getTargetsList() { 
+    return this->m_targets_list; 
 }
 

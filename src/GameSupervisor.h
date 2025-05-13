@@ -23,13 +23,14 @@ private :
     std::map<Player* , int> m_real_movements_counter;
     std::pair<Robot*, Direction> m_robot_direction;
     std::vector<Player*> m_sorted_players;
-    Target m_current_target; 
-    std::vector<Target> m_targets_list;
+    Target* m_current_target; 
+    std::vector<Target*>* m_targets_list;
     enum State m_actual_state = State::INIT_PLAYERS;
 
 public:
 
     GameSupervisor();
+    
     void setBoard(Board i_board);
 
     void initPlayers(std::string i_players_names);
@@ -50,7 +51,7 @@ public:
 
     void  setPlayers(const std::vector<Player>& i_player);
 
-    void  setCurrentTarget(const Target& i_current_target);
+    void  setCurrentTarget(Target* i_current_target);
 
     void  setRobotDirection(const std::pair<Robot*, Direction>& i_robot_direction);
 
@@ -60,7 +61,7 @@ public:
 
     void  setAnnouncedMoves(const std::map<Player*, int>& i_announced_moves);
 
-    void  setTargetsList(const std::vector<Target>& i_targets_list);
+    void  setTargetsList(std::vector<Target*>* i_targets_list);
 
     // Getters
 
@@ -68,7 +69,7 @@ public:
 
     Board* getBoard();
 
-    std::vector<Player> getPlayers() const;
+    std::vector<Player>& getPlayers();
     
     std::map<Player*, int> getAnnouncedMoves() const;
     
@@ -78,8 +79,8 @@ public:
 
     std::vector<Player*> getSortedPlayers() const;
     
-    Target getCurrentTarget() const;
+    Target* getCurrentTarget() const;
     
-    std::vector<Target> getTargetsList() const;
+    std::vector<Target*>* getTargetsList();
     
 };

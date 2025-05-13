@@ -24,9 +24,6 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "Robot's Game");
 
-    Ray ray = { 0 };                    // Picking line ray
-    RayCollision collision = { 0 };     // Ray collision hit info
-
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
@@ -36,21 +33,6 @@ int main(void)
         // Update
         //----------------------------------------------------------------------------------
         currentScene->Update(GetFrameTime());
-        // if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-        // {
-        //     if (!collision.hit)
-        //     {
-        //         ray = GetScreenToWorldRay(GetMousePosition(), camera);
-
-        //         // // Check collision between ray and box
-        //         // collision = GetRayCollisionBox(ray,
-        //         //             (BoundingBox){(Vector3){ cubePosition.x - cubeSize.x/2, cubePosition.y - cubeSize.y/2, cubePosition.z - cubeSize.z/2 },
-        //         //                           (Vector3){ cubePosition.x + cubeSize.x/2, cubePosition.y + cubeSize.y/2, cubePosition.z + cubeSize.z/2 }});
-
-        //         //TODO: CHECK COLISIONS WITH ROBOTS
-        //     }
-        //     else collision.hit = false;
-        // }
         //----------------------------------------------------------------------------------
 
         // Draw

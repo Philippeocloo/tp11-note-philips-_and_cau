@@ -11,7 +11,7 @@ class Board {
     private:
         Cell cells[TAILLE_X][TAILLE_Y];
         std::vector<Robot> m_robots;
-        std::vector<Target> m_allTargets;
+        std::vector<Target*> m_allTargets;
         
     public:
 
@@ -23,7 +23,7 @@ class Board {
         ~Board() = default;
 
 // Getters
-        std::vector<Target>&    getAllTargets() { return m_allTargets; };
+        std::vector<Target*>*    getAllTargets() { return &m_allTargets; };
         Cell&                   getCell(int x, int y) { return cells[x][y]; };
         std::vector<Robot>*     getRobots() { return &m_robots; };
 

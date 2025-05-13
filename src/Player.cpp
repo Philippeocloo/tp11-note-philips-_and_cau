@@ -32,7 +32,7 @@ void Player::giveTry(Board* i_board, Robot* robot, Direction dir) {
 }
 
 bool Player::tryPlayer(
-    Target i_target, 
+    Target* i_target, 
     Robot* i_robot, 
     Direction i_dir, 
     Robot* i_selectedRobot

@@ -2,9 +2,10 @@
 
 #include <Board.h>
 
-Vector3 operator+(Vector3 i, const Vector3 t) {
-    return (Vector3){ i.x + t.x, i.y + t.y, i.z + t.z};
-}
+#include <raymath.h>
+
+#include "VectorHelper.h"
+
 
 GameScene::GameScene(std::string players)
 {
@@ -22,12 +23,10 @@ GameScene::GameScene(std::string players)
     m_crossModel = LoadModel("res/cross.obj");
     m_triModel = LoadModel("res/tri.obj");
 
-    //Creating board
-    Board board = Board();
-    board.placeAngles();
-
-    m_supervisor.setBoard(board);
+    m_supervisor.initPlayers(players);
+    m_supervisor.changeState(State::START_TOUR);
     m_robotRenderer.setRobots(m_supervisor.getBoard()->getRobots());
+    m_robotRenderer.setCamera(&m_camera);
 }
 
 GameScene::~GameScene()
@@ -38,8 +37,52 @@ GameScene::~GameScene()
 
 }
 
+
+int GameScene::getPlayerBuzzing()
+{
+    //Check button presses
+    int key = GetCharPressed();
+
+    //Key pressed is A -> Z (https://en.wikipedia.org/wiki/List_of_Unicode_characters)
+    if(key >= 97 && key <= 122 ) {
+        for (size_t i = 0; i < m_supervisor.getPlayers().size(); i++)
+        {
+            Player& p = m_supervisor.getPlayers()[i];
+            std::cout << p.getLetter() << "  " << key << std::endl;
+            if(key == p.getLetter()) {
+                return i;
+            }
+        }
+    }
+
+    return -1;
+}
+
 void GameScene::Update(float deltaTime)
 {
+    switch (m_supervisor.getActualState())
+    {
+    case State::START_TOUR:
+    {
+        m_robotRenderer.checkSelection();
+        int buzzPlayer = getPlayerBuzzing();
+
+        if(buzzPlayer == -1) {
+            break;
+        }
+
+        std::cout << "youhou" << std::endl;
+        //DEMANDER CHOIX
+        m_supervisor.changeState(State::PLAYER_PROPOSAL);
+        /* code */
+        break;
+    }
+    default:
+        break;
+    }
+
+    //CHECK FOR BUZZ OF ANY PLAYER
+
 }
 
 void GameScene::Render()
@@ -58,6 +101,41 @@ void GameScene::Render()
         }
 
         DrawGrid(16, 1.0f);
+
+        switch (m_supervisor.getActualState())
+        {
+        case State::START_TOUR:
+        case State::WAIT_60SEC:
+        case State::PLAYER_PROPOSAL:
+        case State::END_60SEC:
+        case State::START_PLAYER_PROPOSAL:
+        case State:: MOVING_ROBOT:
+        case State::END_PLAYER_PROPOSAL:
+        {
+            Target* target = m_supervisor.getCurrentTarget();
+            Color drawColor = getColorFromRColor(target->getColor());
+
+            Vector3 pos = {0.0f, 1.0f, 0.0f};
+
+            switch(target->getShape()) {
+                case Shape::CROSS:
+                    DrawModel(m_crossModel, pos, 1.0f, drawColor);
+                    break;
+                case Shape::CIRCLE:
+                    DrawCylinder(pos, 0.5f, 0.5f, 0.1f, 8, drawColor);
+                    break;
+                case Shape::SQUARE:
+                    DrawCube(pos, 0.9f, 0.1f, 0.9f, drawColor);
+                    break;
+                case Shape::TRIANGLE:
+                    DrawModel(m_triModel, pos, 1.0f, drawColor);
+                    break;
+            }
+        }
+            break;
+        default:
+            break;
+        }
 
     EndMode3D();
 
@@ -95,9 +173,9 @@ void GameScene::RenderCell(Cell& currentCell) {
 
     //render the target
     if(currentCell.hasTarget()) {
-        Target target = currentCell.getTarget();
-        Color drawColor = getColorFromRColor(target.getColor());
-        switch(target.getShape()) {
+        Target* target = currentCell.getTarget();
+        Color drawColor = getColorFromRColor(target->getColor());
+        switch(target->getShape()) {
             case Shape::CROSS:
                 DrawModel(m_crossModel, cellPosition, 1.0f, drawColor);
                 break;

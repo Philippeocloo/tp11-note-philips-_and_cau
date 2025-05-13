@@ -26,6 +26,6 @@ public:
 
 // Autres méthodes
     bool checkIfObstacle(Direction dir, Board* i_board) ;
-    bool onTarget(Target i_target);
+    bool onTarget(Target* i_target);
     void move(Direction i_direction, Board* i_board);
 };
