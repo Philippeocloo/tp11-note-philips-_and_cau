@@ -13,9 +13,7 @@
 
 
 TEST(GameSupervisorTest, initPlayersTest) {
-    // Création d'une instance Board 
-    Board board;
-    GameSupervisor gameSupervisor{board};
+    GameSupervisor gameSupervisor;
 
     // Init players
     gameSupervisor.initPlayers("ABCD");
@@ -30,29 +28,22 @@ TEST(GameSupervisorTest, initPlayersTest) {
 }
 
 TEST(GameSupervisorTest,FindRobotByColorTest) {
-    // Création d'une instance Board et initialisation des cellules et des robots
-    Board board;
-    board.initializeCells();
-    board.initializeRobots();
-
     // Create a GameSupervisor instance
-    GameSupervisor gameSupervisor{board};
+    GameSupervisor gameSupervisor;
 
     // Get the robots from the board
-    std::vector<Robot>* robots = board.getRobots();
+    std::vector<Robot>* robots = gameSupervisor.getBoard()->getRobots();
 
     // Test finding a robot by color
-    Robot* foundRobot = gameSupervisor.findRobotByColor(robots, RColor::RED);
-    EXPECT_EQ(foundRobot->getColor(), RColor::RED);
+    Robot* foundRobot = gameSupervisor.findRobotByColor(robots, RColor::R_RED);
+    EXPECT_EQ(foundRobot->getColor(), RColor::R_RED);
 }
 
 TEST(GameSupervisorTest, GivePointTest) {
     // Creaction d'un joueur
     Player player('A');
 
-    // Création d'une instance Board 
-    Board board;
-    GameSupervisor gameSupervisor{board};
+    GameSupervisor gameSupervisor;
 
     // Donner un point au joueur
     gameSupervisor.givePoint(player);
@@ -67,9 +58,7 @@ TEST(GameSupervisorTest, SortPlayersTest) {
     Player player2('B');
     Player player3('C');
 
-    // Création d'une instance Board 
-    Board board;
-    GameSupervisor gameSupervisor{board};
+    GameSupervisor gameSupervisor;
 
     // Ajouter les joueurs au GameSupervisor
     gameSupervisor.setPlayers({player1, player2, player3});
@@ -92,8 +81,7 @@ TEST(GameSupervisorTest, SortPlayersTest) {
 
 TEST(GameSupervisorTest, SettersAndGettersTest) {
     // Création d'une instance Board 
-    Board board;
-    GameSupervisor gameSupervisor{board};
+    GameSupervisor gameSupervisor;
 
     // Création et ajout des joueurs dans le GameSupervisor
     Player player1('A');
@@ -107,8 +95,8 @@ TEST(GameSupervisorTest, SettersAndGettersTest) {
     EXPECT_EQ(gameSupervisor.getActualState(), State::INIT_PLAYERS);
 
     // Set and get current target
-    Target target( Shape::CIRCLE , RColor::RED);
-    gameSupervisor.setCurrentTarget(target);
-    EXPECT_EQ(gameSupervisor.getCurrentTarget().getColor(), RColor::RED);
+    Target target( Shape::CIRCLE , RColor::R_RED);
+    gameSupervisor.setCurrentTarget(&target);
+    EXPECT_EQ(gameSupervisor.getCurrentTarget()->getColor(), RColor::R_RED);
 
 }
