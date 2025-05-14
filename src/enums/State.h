@@ -8,8 +8,9 @@ enum class State {
     PLAYER_PROPOSAL       = 5,
     END_60SEC             = 6,
     START_PLAYER_PROPOSAL = 7,
-    MOVING_ROBOT          = 8,
-    END_PLAYER_PROPOSAL   = 9,
-    END_TOUR              = 10,
-    END_GAME              = 11,
+    WAIT_FOR_MOVE         = 8,
+    MOVING_ROBOT          = 9,
+    END_PLAYER_PROPOSAL   = 10,
+    END_TOUR              = 11,
+    END_GAME              = 12,
 };
