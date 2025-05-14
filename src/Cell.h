@@ -7,6 +7,13 @@
 #include "Target.h"
 #include "Robot.h"
 
+/**
+ * @class Cell
+ * @brief Représente une case du plateau de jeu.
+ *
+ * Chaque cellule peut contenir un robot, une cible, et des informations sur ses bordures.
+ */
+
 class Robot;
 
 class Cell {

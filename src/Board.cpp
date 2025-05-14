@@ -259,7 +259,17 @@ void Board::placeAngles() {
     placeBorder(this, x, y, static_cast<Border>(rand() % 4 + 1));
     Target* lastTarget = new Target(Shape::CROSS, RColor::MULTICOLOR);
     this->getCell(x,y).setTarget(lastTarget);
-    m_allTargets.push_back(lastTarget);
+
+    //Not optimal, but working
+    for (int y = 0; y < TAILLE_Y; y++) {
+        for (int x = 0; x < TAILLE_X; x++) {
+            Cell& currentCell = this->getCell(x, y);
+            
+            if(currentCell.hasTarget()) {
+                m_allTargets.push_back(currentCell.getTarget());
+            }
+        }
+    }
 }
 
 /***

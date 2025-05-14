@@ -8,10 +8,18 @@
 #include <iostream>
 
 //--------------CONSTRUCTEUR------------------//
+/**
+ * @file Robot.cpp
+ * @brief Implémente les méthodes de la classe Robot, représentant un robot sur le plateau de jeu.
+ */
 Robot::Robot(RColor i_color, Cell* i_cell): m_color(i_color), m_cell(i_cell) {}
 //____________________________________________//
 
 //--------------SETTERS-----------------------//
+/**
+ * @brief Met à jour la cellule actuelle du robot
+ * @param i_newCell Nouvelle cellule assignée au robot
+ */
 void Robot::setCell(Cell* i_newCell) {
     m_cell = i_newCell;
 }
@@ -19,6 +27,13 @@ void Robot::setCell(Cell* i_newCell) {
 
 
 //--------------AUTRES METHODES-----------------------//
+
+/**
+ * @brief Vérifie si un obstacle empêche le robot d'avancer dans la direction donnée
+ * @param dir Direction de déplacement souhaitée
+ * @param i_board Plateau sur lequel se trouve le robot
+ * @return true si un obstacle bloque le déplacement, false sinon
+ */
 bool Robot::checkIfObstacle(Direction dir, Board* i_board) {
     if (!m_cell || !i_board) return true;
 
@@ -106,6 +121,11 @@ bool Robot::checkIfObstacle(Direction dir, Board* i_board) {
     return false; // Pas d'obstacle
 }
 
+/**
+ * @brief Déplace le robot dans une direction donnée tant qu'aucun obstacle n'est rencontré
+ * @param i_direction Direction dans laquelle déplacer le robot
+ * @param i_board Plateau sur lequel effectuer le déplacement
+ */
 void Robot::move(Direction i_direction, Board* i_board){
     while (!checkIfObstacle(i_direction, i_board)) {
         int x = m_cell->getX();
@@ -128,10 +148,15 @@ void Robot::move(Direction i_direction, Board* i_board){
     }
 }
 
+/**
+ * @brief Vérifie si le robot se trouve actuellement sur la cible donnée
+ * @param i_target Cible à tester
+ * @return true si le robot est sur la cible (même couleur ou MULTICOLOR), false sinon
+ */
 bool Robot::onTarget(Target* i_target) {
     Target* currentTarget = m_cell->getTarget();
 
-    if (currentTarget == i_target && (m_color == i_target->getColor() || m_color == RColor::MULTICOLOR)) {
+   if (currentTarget == i_target && (m_color == i_target->getColor() || currentTarget->getColor() == RColor::MULTICOLOR)) {
         return true;
     }   
     return false;

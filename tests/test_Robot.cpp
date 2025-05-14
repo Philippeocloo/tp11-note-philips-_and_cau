@@ -6,10 +6,10 @@
 TEST(RobotTest, ConstructorTest) {
 
     Cell cell = Cell(5, 3);
-    Robot robot(RColor::RED, &cell);
+    Robot robot(RColor::R_RED, &cell);
 
     // Vérifier les attributs après construction
-    EXPECT_EQ(robot.getColor(), RColor::RED);
+    EXPECT_EQ(robot.getColor(), RColor::R_RED);
     EXPECT_EQ(robot.getCell()->getX(), 5);
     EXPECT_EQ(robot.getCell()->getY(), 3);
 }

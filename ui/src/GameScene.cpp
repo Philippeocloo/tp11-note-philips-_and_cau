@@ -195,7 +195,16 @@ void GameScene::Update(float deltaTime)
                 m_supervisor.setRobotDirection(std::pair(selection.selectedRobot, selection.dir));
                 m_supervisor.changeState(State::MOVING_ROBOT);
             }
+            break;
         }
+    case State::END_TOUR:
+        m_currentBoard = m_supervisor.getBoard();
+        m_robotRenderer.setRobots(m_currentBoard->getRobots());
+
+        if(GetKeyPressed() == KEY_ENTER){
+            m_supervisor.changeState(State::START_TOUR);
+        }
+        break;
     default:
         break;
     }
@@ -206,6 +215,28 @@ void GameScene::Update(float deltaTime)
 
 void GameScene::Render()
 {
+    if(m_supervisor.getActualState() == State::END_TOUR) {
+
+        std::string scoreString = "Scores: ";
+        DrawText(scoreString.c_str(), WINDOW_SIZE_X/2-40, 40, 20, BLACK);
+
+        int y = 80;
+
+        for(Player& p : m_supervisor.getPlayers()) {
+            scoreString.clear();
+            scoreString += p.getLetter();
+            scoreString += " : ";
+            scoreString += std::to_string(p.getScore());
+
+            DrawText(scoreString.c_str(), WINDOW_SIZE_X/2-40, y, 20, BLACK);
+            y += 20;
+        }
+
+
+
+        return;
+    }
+
     if(m_supervisor.getActualState() == State::WAIT_FOR_MOVE) {
         Player* currentPlayer = m_supervisor.getSortedPlayers()[0];
         
