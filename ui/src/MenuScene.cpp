@@ -48,7 +48,7 @@ void MenuScene::Update(float deltaTime)
 
 void MenuScene::Render()
 {
-    DrawText("Bouncing Robots", 100, 200, 20, BLACK);
+    DrawText("Ricochet Robots", 100, 200, 20, BLACK);
     DrawText("Appuyez sur chaque touche associée à un joueur: ", 100, 230, 20, BLACK);
     DrawText(m_playerString.c_str(), 100, 260, 20, BLACK);
 

@@ -22,7 +22,7 @@ int main(void)
     const int screenHeight = WINDOW_SIZE_Y;
     SetConfigFlags(FLAG_MSAA_4X_HINT|FLAG_WINDOW_HIGHDPI);
 
-    InitWindow(screenWidth, screenHeight, "Robot's Game");
+    InitWindow(screenWidth, screenHeight, "Robots Game");
 
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------

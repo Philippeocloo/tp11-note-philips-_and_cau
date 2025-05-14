@@ -138,8 +138,6 @@ void GameSupervisor::changeState(enum State i_actual_state){
                 m_targets_list->erase(m_targets_list->begin()+indexToDelete);
                 //m_targets_list->erase(std::remove(m_targets_list->begin(), m_targets_list->end(), m_current_target), m_targets_list->end()); // enlever la cible de la liste des cibles
 
-                delete &m_current_target;
-
                 //detruire la board du joueur
                 delete m_sorted_players[0]->getBoard();
 
