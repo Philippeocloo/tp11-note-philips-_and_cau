@@ -65,7 +65,6 @@ void GameSupervisor::changeState(enum State i_actual_state){
             // A faire dans l'interface graphique :
             // - Arrêter le timer de 60 secondes
             // - Passer à l'état START_PLAYER_PROPOSAL
-
             break;
 
         case State::START_PLAYER_PROPOSAL:
@@ -101,11 +100,15 @@ void GameSupervisor::changeState(enum State i_actual_state){
                 // Prendre le plateau du joueur et le mettre comme plateau de jeu
                 this->m_board = *(m_sorted_players[0]->getBoard()); // mettre à jour le plateau du joueur
 
-                //detruire la board du joueur
-                delete m_sorted_players[0]->getBoard(); 
+                 
 
                 //detruire la cible
                 m_targets_list->erase(std::remove(m_targets_list->begin(), m_targets_list->end(), m_current_target), m_targets_list->end()); // enlever la cible de la liste des cibles
+
+                delete &m_current_target;
+
+                //detruire la board du joueur
+                delete m_sorted_players[0]->getBoard();
 
                 // Passer à l'état END_TOUR 
                 changeState(State::END_TOUR);
@@ -175,7 +178,7 @@ Robot* GameSupervisor::findRobotByColor(std::vector<Robot>* i_robots, const RCol
 
 void GameSupervisor::givePoint(Player &i_player){ // ajouter un point au joueur gagnant
     int old_score = i_player.getScore();
-    i_player.setScore(old_score++);
+    i_player.setScore(old_score+1);
 }
 
 void GameSupervisor::sortPlayers() { // trier les joueurs en fonction de leur nombre de coups annoncés
