@@ -88,7 +88,6 @@ void GameSupervisor::changeState(enum State i_actual_state){
             // A faire dans l'interface graphique :
             // - Arrêter le timer de 60 secondes
             // - Passer à l'état START_PLAYER_PROPOSAL
-
             break;
 
         case State::START_PLAYER_PROPOSAL:
@@ -124,8 +123,7 @@ void GameSupervisor::changeState(enum State i_actual_state){
                 // Prendre le plateau du joueur et le mettre comme plateau de jeu
                 this->m_board = new Board(*m_sorted_players[0]->getBoard()); // mettre à jour le plateau du joueur
 
-                //detruire la board du joueur
-                delete m_sorted_players[0]->getBoard(); 
+                 
 
                 unsigned int indexToDelete = 255;
                 //detruire la cible
@@ -139,6 +137,11 @@ void GameSupervisor::changeState(enum State i_actual_state){
                 }
                 m_targets_list->erase(m_targets_list->begin()+indexToDelete);
                 //m_targets_list->erase(std::remove(m_targets_list->begin(), m_targets_list->end(), m_current_target), m_targets_list->end()); // enlever la cible de la liste des cibles
+
+                delete &m_current_target;
+
+                //detruire la board du joueur
+                delete m_sorted_players[0]->getBoard();
 
                 // Passer à l'état END_TOUR 
                 changeState(State::END_TOUR);
