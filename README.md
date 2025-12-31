@@ -3,6 +3,10 @@
 Projet réalisé à Centrale Nantes dans le cadre du module SMP  
 Date de rendu : 14 mai 2025.
 
+## Documentation
+
+- Rapport technique détaillé (PDF) : voir `report/`
+  
 ## Contexte
 
 Ce dépôt correspond à un TP réalisé en groupe dans le cadre de la formation d’ingénieur à Centrale Nantes.  
