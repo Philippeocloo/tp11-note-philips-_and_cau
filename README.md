@@ -6,7 +6,7 @@ Date de rendu : 14 mai 2025.
 ## Contexte
 
 Ce dépôt correspond à un TP réalisé en groupe dans le cadre de la formation d’ingénieur à Centrale Nantes.  
-Le projet consiste en l’implémentation du jeu *Ricochet Robots*, incluant la simulation des déplacements des robots, la gestion des cibles et la génération aléatoire du plateau.
+Le projet consiste en l’implémentation du jeu *Ricochet Robots* en plateau 3D, incluant la simulation des déplacements des robots, la gestion des cibles et la génération aléatoire du plateau.
 
 Les règles du jeu imposent des déplacements contraints jusqu’à un obstacle, avec pour objectif de minimiser le nombre de mouvements afin d’atteindre les cibles dans l’ordre défini.
 
